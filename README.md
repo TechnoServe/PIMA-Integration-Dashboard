@@ -16,8 +16,14 @@ Salesforce integration with the satellite dashboard/map.
 
 - Modify `.env` file to match your environment
 
-- Install the required packages
+- Install the required packages.  Note: before running the command below, It is advised that you create virtual environment to isolate this application's packages from the rest of  other environments in your computer.
     > `pip install -r requirements.txt`
+
+- Run the migrations
+    > `python manage.py migrate`
+
+- If you need to seed dummy data. If not, skip this step.
+    > `python manage.py loaddata dummy_data.json`
 
 - Start the application
     > `python manage.py runserver`

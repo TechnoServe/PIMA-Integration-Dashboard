@@ -22,8 +22,8 @@ class Farm(models.Model):
 
     code = models.UUIDField(default=uuid.uuid4, editable=False)
     owner = models.ForeignKey(Farmer, on_delete=models.SET_NULL, null=True)
-    langitude = models.FloatField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
+    langitude = models.FloatField(null=True, blank=True)
     number_of_trees = models.IntegerField(null=True, blank=True)
     address = models.CharField(max_length=20, blank=True, null=True)
     type = models.CharField(choices=FARM_TYPE, default="NORMAL", max_length=20)
@@ -70,8 +70,8 @@ class TrainingModule(models.Model):
 
 class Training(models.Model):
     date = models.DateField(auto_now_add=True)
-    langitude = models.FloatField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
+    langitude = models.FloatField(null=True, blank=True)
     number_of_participants = models.IntegerField()
     module = models.ForeignKey(TrainingModule, on_delete=models.SET_NULL, blank=True, null=True)
     trainer = models.ForeignKey(Trainer, on_delete=models.SET_NULL, null=True)

@@ -46,7 +46,7 @@
         "pk": 1, 
         "fields": {
             "owner": 1, 
-            "latitude": -1.9821926921300532, 
+            "latitude": -1.9821926921300532,
             "langitude": 30.101765191305898, 
             "number_of_trees": 56, 
             "address": "232J+GVQ Kigali", 
@@ -60,8 +60,8 @@
         "pk": 2, 
         "fields": { 
             "owner": 1, 
-            "latitude": -1.9821926921301532, 
-            "langitude": 30.101765191307898, 
+            "latitude": -1.939958515229127,
+            "langitude": 30.150792381847694, 
             "number_of_trees": 16, 
             "address": "232J+ITY Kigali", 
             "type": "NORMAL", 
@@ -74,8 +74,8 @@
         "pk": 3, 
         "fields": {
             "owner": 2, 
-            "latitude": -1.9821926921987532, 
-            "langitude": 30.10176519157998, 
+            "latitude": -1.9797308947393357, 
+            "langitude": 30.05353244797202, 
             "number_of_trees": 90, 
             "address": "232J+PLK Kigali", 
             "type": "NORMAL", 
@@ -88,8 +88,8 @@
         "pk": 4, 
         "fields": { 
             "owner": 3, 
-            "latitude": -1.9821926921301532, 
-            "langitude": 30.101765191307898, 
+            "latitude":-1.9881420450674652,
+            "langitude": 29.932312275072352, 
             "number_of_trees": 15, 
             "address": "232J+TYV Kigali", 
             "type": "NORMAL", 

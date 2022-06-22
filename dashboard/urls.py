@@ -1,7 +1,6 @@
 from django.urls import path
-
-from . import views
+from .views import dummy_map
 
 urlpatterns = [
-    path('', views.dashboard_map, name='dashboard_map'),
+    path('', dummy_map, name='dummy_map'),
 ]

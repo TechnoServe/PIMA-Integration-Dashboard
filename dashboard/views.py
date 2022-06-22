@@ -1,11 +1,55 @@
+import csv
 import folium
 from django.shortcuts import render
 from dashboard.models import Farm, Farmer
+from PIMA_Dashboard.settings import BASE_DIR
+
 
 # Create your views here.
 
-def dashboard_map(request):
-    
+def home(request):
+
+    #DemoPlots2022.csv
+    index = 0
+    lat = 0
+    lon = 0
+    with open(f'{BASE_DIR}/SampleData/DemoPlots2022.csv') as demoPlots:
+        demoPlots = csv.reader(demoPlots, delimiter=',')
+        for row in demoPlots:
+            if(index==0): 
+                index += 1
+                continue
+
+            if(index==1):
+                lat = float(row[2])
+                lon = float(row[3])
+                index = 0
+                break
+        map = folium.Map([lat, lon], zoom_start=7)
+                
+        for row in demoPlots:
+            if(index==0): 
+                index += 1
+                continue
+        
+            if((row[2] == "") or (row[3] == "")): continue
+
+            cord = [float(row[2]), float(row[3])]
+            print(type(row))
+            print(type(row[2]))
+            folium.Marker(cord).add_to(map)
+
+    folium.raster_layers.TileLayer('Stamen Terrain').add_to(map)
+    folium.raster_layers.TileLayer('Stamen Toner').add_to(map)
+    folium.LayerControl().add_to(map)
+
+    map =  map._repr_html_()
+    context = {'map': map,}
+    return render(request, 'dashboard/index.html', context)
+
+
+
+def dummy_map(request):
     #coordinates = list(Farm.objects.values_list('latitude', 'langitude'))
     farms = list(Farm.objects.values())
 

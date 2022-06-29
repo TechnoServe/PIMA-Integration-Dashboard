@@ -90,6 +90,24 @@ DATABASES = {
     }
 }
 
+# Caching
+# https://docs.djangoproject.com/en/4.0/ref/settings/#caches
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': env('REDIS_INSTANCE'),
+        'TIMEOUT' : env('CACHE_TIMEOUT'), 
+        'OPTIONS': {
+            'db': '10',
+            #'parser_class': 'redis.connection.PythonParser',
+            'pool_class': 'redis.BlockingConnectionPool',
+        }
+    }
+}
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -131,3 +149,5 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+

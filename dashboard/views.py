@@ -1,14 +1,29 @@
 import csv
 import folium
+from django.core.cache import cache
 from django.shortcuts import render
 from dashboard.models import Farm, Farmer
 from PIMA_Dashboard.settings import BASE_DIR
 
 
 # Create your views here.
-
 def home(request):
+    
+    observations = cache.get('observations')
+    print("Observations: ", observations)
+    if observations is None:
+        #TODO: Fire background task to fetch data
+        return render(request, 'dashboard/salesforce_error.html')
+    
 
+    #TODO: load the observation data
+    context =  {}
+    #TODO: Change the html page
+    return render(request, 'dashboard/observations.html', context)
+
+
+
+def exported(request):
     #DemoPlots2022.csv
     index = 0
     lat = 0

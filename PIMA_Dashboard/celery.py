@@ -1,6 +1,7 @@
 import os
-
 from celery import Celery
+#from django.conf import settings
+from celery.schedules import crontab
 
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'PIMA_Dashboard.settings')
@@ -15,16 +16,16 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 
 
 
+
 #Celery beat Settings
-app.conf.beat_scheduler = {
-    
+app.conf.beat_schedule = {
+    'pull-salesforce-data-every-10mins': {
+        'task' : 'dashboard.tasks.getObservations',
+        'schedule' : crontab(minute='*/10'),
+    }
 }
 
 
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks()
 
-
-@app.task(bind=True)
-def debug_task(self):
-    print(f'Request: {self.request!r}')

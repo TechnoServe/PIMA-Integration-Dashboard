@@ -1,7 +1,5 @@
 import csv
-from curses.ascii import HT
 import folium
-from .tasks import test_func
 from django.core.cache import cache
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
@@ -10,11 +8,6 @@ from PIMA_Dashboard.settings import BASE_DIR
 
 
 # Create your views here.
-
-def test(request):
-    test_func.delay()
-    return HttpResponse("Done")
-
 
 def home(request):
     

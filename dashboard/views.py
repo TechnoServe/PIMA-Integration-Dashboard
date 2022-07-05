@@ -11,18 +11,29 @@ from PIMA_Dashboard.settings import BASE_DIR
 
 def home(request):
     
-    observations = cache.get('observations')
-    print("Observations: ", observations)
+    observations = cache.get('Observations')
+    print("Observations:", observations)
+
     if observations is None:
         #TODO: Fire background task to fetch data
         return render(request, 'dashboard/salesforce_error.html')
     
+    map = folium.Map([observations[0].get('Observation_Location__Latitude__s'), observations[0].get('Observation_Location__Longitude__s')], zoom_start=7)
+    for obs_ in observations:
+        cord = [obs_.get('Observation_Location__Latitude__s'), obs_.get('Observation_Location__Longitude__s')]
+        if(cord[0] is None or cord[1] is None): continue
+        folium.Marker(cord, tooltip="Observation").add_to(map)
+    
+    folium.raster_layers.TileLayer('Stamen Terrain').add_to(map)
+    folium.raster_layers.TileLayer('Stamen Toner').add_to(map)
+    folium.raster_layers.TileLayer('Stamen Watercolor').add_to(map)
+    folium.LayerControl().add_to(map)
 
-    #TODO: load the observation data
-    context =  {}
-    #TODO: Change the html page
+
+    map =  map._repr_html_()
+    context = {'map': map,}
+
     return render(request, 'dashboard/observations.html', context)
-
 
 
 def exported(request):

@@ -24,6 +24,10 @@ Salesforce integration with the satellite dashboard/map.
 
 - If you need to seed dummy data. If not, skip this step.
     > `python manage.py loaddata dummy_data.json`
-
+- /!\ :Make sure Redis instance is running as you specified in `.env` file.
+- Start the Celery worker
+    > `celery --app PIMA_Dashboard.celery worker -l info`
+- Start the Celery scheduler beat.
+    > `celery --app PIMA_Dashboard.celery beat -l info`
 - Start the application
     > `python manage.py runserver`

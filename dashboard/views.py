@@ -67,7 +67,7 @@ def home(request):
             folium.Marker(
                     location=cord,
                     tooltip="Observation",
-                    icon=folium.Icon(color="orange"),
+                    icon=folium.Icon(color="red"),
                     ).add_to(map)
     
     

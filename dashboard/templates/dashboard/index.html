@@ -1,16 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-{% block content %}
-<head>
-    <meta charset="UTF-8">
-    <title>Map</title>
-</head>
-<body>
-  <h2>This is title</h2>
-  <p>It can be a MENU area</p>
-  <div> {{ map | safe }}</div>
+{% extends "dashboard/base.html" %}
 
-</body>
-</html>
+{% block content %}
+
+
+<div class="container-fluid">
+    <div class="container" style="padding:64px 0">
+        <div class="card"  style="height: 100vh">
+            <div class="row" style="padding:32px">
+                <div class="col-1">
+                    <img src='https://www.technoserve.org/wp-content/themes/technoserve/assets/img/logomark-full.svg' height='56px'/>
+                </div>
+                <div class="col-6" style="text-align: left;">
+                    <p style="color:#000000; font-weight:900; font-size:24px; margin-bottom: 0px;">PIMA Dashboard</p>
+                    <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 8px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+                </div>
+                <div class="col-2"></div>
+                <div class="col-3">
+                    <span style="color:#333; font-weight:400; font-size:14px">Country: 
+                    <span><select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="height:42px; font-size:12px"></span>
+                        <option selected>Kenya</option>
+                        <option value="1">Ethiopia</option>
+                        <option value="2">Uganda</option>
+                        <option value="3">Rwanda</option>
+                        <option value="3">Burundi</option>
+                      </select>
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                 <div class="col-12"> {{ map | safe }}</div> 
+            </div>
+        </div>     
+    </div>
+</div>
+
+
+
+
 
 {% endblock %}

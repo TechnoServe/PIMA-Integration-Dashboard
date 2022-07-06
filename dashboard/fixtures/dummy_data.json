@@ -1,0 +1,230 @@
+
+[
+    {
+        "model": "dashboard.farmer", 
+        "pk": 1, 
+        "fields": {
+            "firstname": "Kerubo", 
+            "lastname": "Wanjiru"
+        }
+    }, 
+    
+    {
+        "model": "dashboard.farmer", 
+        "pk": 2, 
+        "fields": {
+            "firstname": "Semiti", 
+            "lastname": "Keth"
+        }
+    }, 
+
+    {
+        "model": "dashboard.farmer", 
+        "pk": 3, 
+        "fields": {
+            "firstname": "Sabiti", 
+            "lastname": ""
+        }
+    },
+
+    {
+        "model": "dashboard.farmer", 
+        "pk": 4, 
+        "fields": {
+            "firstname": "Henry", 
+            "lastname": "zawadi"
+        }
+    },
+
+
+
+
+
+    
+    {
+        "model": "dashboard.farm", 
+        "pk": 1, 
+        "fields": {
+            "owner": 1, 
+            "latitude": -1.9821926921300532,
+            "langitude": 30.101765191305898, 
+            "number_of_trees": 56, 
+            "address": "232J+GVQ Kigali", 
+            "type": "NORMAL", 
+            "UPI": "fe433dje"
+        }
+    }, 
+    
+    {
+        "model": "dashboard.farm", 
+        "pk": 2, 
+        "fields": { 
+            "owner": 1, 
+            "latitude": -1.939958515229127,
+            "langitude": 30.150792381847694, 
+            "number_of_trees": 16, 
+            "address": "232J+ITY Kigali", 
+            "type": "NORMAL", 
+            "UPI": "z04jf3dje"
+        }
+    },
+
+    {
+        "model": "dashboard.farm", 
+        "pk": 3, 
+        "fields": {
+            "owner": 2, 
+            "latitude": -1.9797308947393357, 
+            "langitude": 30.05353244797202, 
+            "number_of_trees": 90, 
+            "address": "232J+PLK Kigali", 
+            "type": "NORMAL", 
+            "UPI": "k09r33dje"
+        }
+    }, 
+    
+    {
+        "model": "dashboard.farm", 
+        "pk": 4, 
+        "fields": { 
+            "owner": 3, 
+            "latitude":-1.9881420450674652,
+            "langitude": 29.932312275072352, 
+            "number_of_trees": 15, 
+            "address": "232J+TYV Kigali", 
+            "type": "NORMAL", 
+            "UPI": "o45jf3dje"
+        }
+    },
+
+
+
+
+    {
+        "model": "dashboard.farmvisit", 
+        "pk": 1, 
+        "fields": { 
+            "date": "2022-06-21",
+            "village": "Kigarama", 
+            "observation": "lorem ipsum odor", 
+            "farm": 1
+        }
+    }, 
+    
+    {
+        "model": "dashboard.farmvisit", 
+        "pk": 2, 
+        "fields": {
+            "date": "2022-05-21",
+            "village": "Tyazo", 
+            "observation": "lorem ipsum odor", 
+            "farm": 3
+        }
+    },
+
+    {
+        "model": "dashboard.farmvisit", 
+        "pk": 3, 
+        "fields": { 
+            "date": "2022-04-21",
+            "village": "Kagugu", 
+            "observation": "lorem ipsum odor", 
+            "farm": 2
+        }
+    },
+
+
+
+
+    {
+        "model": "dashboard.trainer", 
+        "pk": 1, 
+        "fields": {
+            "firstname": "Kenneth", 
+            "lastname": "Jema", 
+            "institution": "TNS", 
+            "phonenumber": "0785576093", 
+            "email": "kenneth@tns.com"
+        }
+    },
+    
+    {
+        "model": "dashboard.trainer", 
+        "pk": 2, 
+        "fields": {
+            "firstname": "Josepg", 
+            "lastname": "kumu", 
+            "institution": "TNS", 
+            "phonenumber": "0785576043", 
+            "email": "joseph@tns.com"
+        }
+    },
+    
+
+
+    {
+        "model": "dashboard.trainingmodule", 
+        "pk": 1, 
+        "fields": {
+            "GAPName": "Coffe Collection", 
+            "category": "Collection", 
+            "description": "Lorem Ipsum odor"
+        }
+    },
+
+
+    
+    {
+        "model": "dashboard.training", 
+        "pk": 1, 
+        "fields": { 
+            "date": "2022-06-21",
+            "latitude": -1.982192692130059, 
+            "langitude": 30.101765191305898, 
+            "number_of_participants": 57, 
+            "module": 1, 
+            "trainer": 1, 
+            "country": "Rwanda", 
+            "department": "Kigali", 
+            "commune": "Kicukiro", 
+            "village": "Nyanza", 
+            "observation": "Lorem ipsum Odor"
+        }
+    },
+
+    {
+        "model": "dashboard.training", 
+        "pk": 2, 
+        "fields": { 
+            "date": "2022-06-04",
+            "latitude": -1.982192692130059, 
+            "langitude": 30.101765191305898, 
+            "number_of_participants": 17, 
+            "module": 1, 
+            "trainer": 1, 
+            "country": "Rwanda", 
+            "department": "Kigali", 
+            "commune": "Kicukiro", 
+            "village": "Nyanza", 
+            "observation": "Lorem ipsum Odor"
+        }
+    },
+
+    {
+        "model": "dashboard.training", 
+        "pk": 3, 
+        "fields": { 
+            "date": "2022-05-11",
+            "latitude": -1.982192692130059, 
+            "langitude": 30.101765191305898, 
+            "number_of_participants": 23, 
+            "module": 1, 
+            "trainer": 2, 
+            "country": "Rwanda", 
+            "department": "Kigali", 
+            "commune": "Kicukiro", 
+            "village": "Nyanza", 
+            "observation": "Lorem ipsum Odor"
+        }
+    }
+]

@@ -7,12 +7,84 @@ from dashboard.models import Farm, Farmer
 from PIMA_Dashboard.settings import BASE_DIR
 
 
-# Create your views here.
+START_LOCATION = [0.5050067786194596, 30.879391642411665] # Need to be changed
 
+# Create your views here.
 def home(request):
+
+    index = 0
+    map = folium.Map(START_LOCATION, zoom_start=5)
+
+    #Training Sessions
+    with open(f'{BASE_DIR}/SampleData/TrainingSessions2022.csv') as trainingSessions:
+        trainingSessions = csv.reader(trainingSessions, delimiter=',')
+        
+        for row in trainingSessions:
+            if(index==0): 
+                index += 1
+                continue
+        
+            if((row[3] == "") or (row[4] == "")): continue
+
+            cord = [float(row[3]), float(row[4])]
+            #folium.Marker(cord).add_to(map)
+            folium.Marker(
+                location=cord,
+                tooltip="Training Session",
+                icon=folium.Icon(color="blue"),
+                ).add_to(map)
+
+    
+    #DemoPlot
+    index = 0
+    with open(f'{BASE_DIR}/SampleData/DemoPlots2022.csv') as demoPlots:
+        demoPlots = csv.reader(demoPlots, delimiter=',')
+
+        for row in demoPlots:
+            if(index==0): 
+                index += 1
+                continue
+        
+            if((row[2] == "") or (row[3] == "")): continue
+
+            cord = [float(row[2]), float(row[3])]
+            
+            folium.Marker(
+                location=cord,
+                tooltip="Demo Plot",
+                icon=folium.Icon(color="green"),
+                ).add_to(map)
+
+    
+    #Observation
+    observations = cache.get('Observations')
+
+    if observations is not None:
+
+        for obs_ in observations:
+            cord = [obs_.get('Observation_Location__Latitude__s'), obs_.get('Observation_Location__Longitude__s')]
+            if(cord[0] is None or cord[1] is None): continue
+            folium.Marker(
+                    location=cord,
+                    tooltip="Observation",
+                    icon=folium.Icon(color="orange"),
+                    ).add_to(map)
+    
+    
+    
+    
+    folium.raster_layers.TileLayer('Stamen Terrain').add_to(map)
+    folium.raster_layers.TileLayer('Stamen Toner').add_to(map)
+    folium.LayerControl().add_to(map)
+
+    map =  map._repr_html_()
+    context = {'map': map,}
+    return render(request, 'dashboard/index.html', context)
+
+
+def salesforceObs(request):
     
     observations = cache.get('Observations')
-    print("Observations:", observations)
 
     if observations is None:
         #TODO: Fire background task to fetch data
@@ -63,8 +135,6 @@ def exported(request):
             if((row[2] == "") or (row[3] == "")): continue
 
             cord = [float(row[2]), float(row[3])]
-            print(type(row))
-            print(type(row[2]))
             folium.Marker(cord).add_to(map)
 
     folium.raster_layers.TileLayer('Stamen Terrain').add_to(map)
@@ -73,7 +143,7 @@ def exported(request):
 
     map =  map._repr_html_()
     context = {'map': map,}
-    return render(request, 'dashboard/index.html', context)
+    return render(request, 'dashboard/test_folium.html', context)
 
 
 
@@ -102,4 +172,4 @@ def dummy_map(request):
     map =  map._repr_html_()
     context = {'map': map,}
 
-    return render(request, 'dashboard/index.html', context)
+    return render(request, 'dashboard/test_folium.html', context)

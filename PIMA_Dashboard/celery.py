@@ -22,6 +22,10 @@ app.conf.beat_schedule = {
     'pull-salesforce-data-every-10mins': {
         'task' : 'dashboard.tasks.getObservations',
         'schedule' : crontab(minute='*/10'),
+    },
+    'pull-programs-from-salesforce': {
+        'task' : 'dashboard.tasks.getPrograms',
+        'schedule' : crontab(minute='*/10'),
     }
 }
 

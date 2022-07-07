@@ -58,6 +58,8 @@ def home(request):
     
     #Observation
     observations = cache.get('Observations')
+    #Programs
+    programs = cache.get('Programs')
 
     if observations is not None:
 
@@ -78,7 +80,7 @@ def home(request):
     folium.LayerControl().add_to(map)
 
     map =  map._repr_html_()
-    context = {'map': map,}
+    context = {'map': map, 'programs': programs}
     return render(request, 'dashboard/index.html', context)
 
 

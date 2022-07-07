@@ -16,13 +16,17 @@
                 </div>
                 <div class="col-2"></div>
                 <div class="col-3">
-                    <span style="color:#333; font-weight:400; font-size:14px">Country: 
+                    <span style="color:#333; font-weight:400; font-size:14px">Program: 
                     <span><select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="height:42px; font-size:12px"></span>
-                        <option selected>Kenya</option>
-                        <option value="1">Ethiopia</option>
+                        <option selected>Select</option>
+
+                        {% for program in programs %}
+                            <option value="{{program.Id}}">{{ program.Name }}</option>
+                        {% endfor %}
+                        <!-- <option value="1">Ethiopia</option>
                         <option value="2">Uganda</option>
                         <option value="3">Rwanda</option>
-                        <option value="3">Burundi</option>
+                        <option value="3">Burundi</option> -->
                       </select>
                     </span>
                 </div>

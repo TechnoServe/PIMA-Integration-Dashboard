@@ -46,3 +46,28 @@ def getObservations(self):
     #Write to caches
     cache.set('Observations', Observations)
     return "Done"
+
+
+
+@shared_task(bind=True)
+def getPrograms(self):
+
+    TOKEN = getToken()
+    
+    Programs = list()
+    holder = dict()
+    
+    sf = Salesforce(instance_url=f'https://{SALESFORCE_INSTANCE}', session_id=TOKEN)
+    programs = sf.query_all("SELECT Id,Name FROM Program__c")
+    
+    program_records =  programs.get('records')
+    
+
+    for row in program_records:
+        holder['Id'] = row.get('Id')
+        holder['Name'] = row.get('Name')
+        Programs.append(holder)
+        holder = {}
+
+    cache.set('Programs', Programs)
+    return "Done"

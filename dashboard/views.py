@@ -26,11 +26,12 @@ def home(request):
         
             if((row[3] == "") or (row[4] == "")): continue
 
-            cord = [float(row[3]), float(row[4])]
-            #folium.Marker(cord).add_to(map)
+            cord = [float(row[3]), float(row[4])] 
+            pop_info = f'<i>Trainer</i>:<b>{row[10]}</b><br><i>Group</i>:<b>{row[9]}</b><br><i>Project</i>:<b>{row[6]}</b><br><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHYRZU5OjdnP0OKZWKIFy1aCnnlqRaVmVre2t3k3BVkVhIXYKLJjFe5Ng1mOXgWfVex2Y&usqp=CAU"/>'
             folium.Marker(
                 location=cord,
                 tooltip="Training Session",
+                popup = pop_info,
                 icon=folium.Icon(color="blue"),
                 ).add_to(map)
 
@@ -48,10 +49,11 @@ def home(request):
             if((row[2] == "") or (row[3] == "")): continue
 
             cord = [float(row[2]), float(row[3])]
-            
+            pop_info = f'<i>Observer</i>:<b>{row[8]}</b><br><i>Owner</i>:<b>{row[7]}</b><br><i>Project</i>:<b>{row[5]}</b>'
             folium.Marker(
                 location=cord,
                 tooltip="Demo Plot",
+                popup = pop_info,
                 icon=folium.Icon(color="green"),
                 ).add_to(map)
 
@@ -66,9 +68,14 @@ def home(request):
         for obs_ in observations:
             cord = [obs_.get('Observation_Location__Latitude__s'), obs_.get('Observation_Location__Longitude__s')]
             if(cord[0] is None or cord[1] is None): continue
+            date_ = obs_.get('Date__c')
+            trainer_ = obs_.get('Trainer__c')
+            project_ = obs_.get('Project_Name__c')
+            pop_info = f'<i>Date</i>:<b>{date_}</b><br><i>Trainer</i>:<b>{trainer_}</b><br><i>Project</i>:<b>{project_}</b><br><img src="https://www.technoserve.org/wp-content/uploads/2021/01/CajuLab-photo-1-300x225.png"/>'
             folium.Marker(
                     location=cord,
                     tooltip="Observation",
+                    popup = pop_info,
                     icon=folium.Icon(color="red"),
                     ).add_to(map)
     

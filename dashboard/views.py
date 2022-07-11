@@ -7,6 +7,7 @@ from dashboard.models import Farm, Farmer
 from PIMA_Dashboard.settings import BASE_DIR
 
 
+
 START_LOCATION = [0.5050067786194596, 30.879391642411665] # Need to be changed
 
 # Create your views here.
@@ -79,15 +80,22 @@ def home(request):
                     icon=folium.Icon(color="red"),
                     ).add_to(map)
     
-    
-    
-    
     folium.raster_layers.TileLayer('Stamen Terrain').add_to(map)
     folium.raster_layers.TileLayer('Stamen Toner').add_to(map)
-    folium.LayerControl().add_to(map)
-
+    
+    # Esri map
+    folium.TileLayer(
+        tiles = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        attr = 'Esri',
+        name = 'Satellite (Esri)',
+        overlay = False,
+        control = True
+       ).add_to(map)
+    folium.LayerControl(collapsed=False).add_to(map)
+    #map.save("tests.html")
     map =  map._repr_html_()
     context = {'map': map, 'programs': programs}
+
     return render(request, 'dashboard/index.html', context)
 
 
@@ -148,6 +156,7 @@ def exported(request):
 
     folium.raster_layers.TileLayer('Stamen Terrain').add_to(map)
     folium.raster_layers.TileLayer('Stamen Toner').add_to(map)
+    
     folium.LayerControl().add_to(map)
 
     map =  map._repr_html_()

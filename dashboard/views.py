@@ -17,6 +17,7 @@ def home(request):
     map = folium.Map(START_LOCATION, zoom_start=5)
 
     #Training Sessions
+    feature_group_training_sessions = folium.FeatureGroup(name="Training Sessions")
     with open(f'{BASE_DIR}/SampleData/TrainingSessions2022.csv') as trainingSessions:
         trainingSessions = csv.reader(trainingSessions, delimiter=',')
         
@@ -34,11 +35,12 @@ def home(request):
                 tooltip="Training Session",
                 popup = pop_info,
                 icon=folium.Icon(color="blue"),
-                ).add_to(map)
+                ).add_to(feature_group_training_sessions)
 
     
     #DemoPlot
     index = 0
+    feature_group_demoPlots = folium.FeatureGroup(name="Demo Plots")
     with open(f'{BASE_DIR}/SampleData/DemoPlots2022.csv') as demoPlots:
         demoPlots = csv.reader(demoPlots, delimiter=',')
 
@@ -56,7 +58,7 @@ def home(request):
                 tooltip="Demo Plot",
                 popup = pop_info,
                 icon=folium.Icon(color="green"),
-                ).add_to(map)
+                ).add_to(feature_group_demoPlots)
 
     
     #Observation
@@ -64,8 +66,10 @@ def home(request):
     #Programs
     programs = cache.get('Programs')
 
+
     if observations is not None:
 
+        feature_group_Observations = folium.FeatureGroup(name="Observations")
         for obs_ in observations:
             cord = [obs_.get('Observation_Location__Latitude__s'), obs_.get('Observation_Location__Longitude__s')]
             if(cord[0] is None or cord[1] is None): continue
@@ -78,12 +82,11 @@ def home(request):
                     tooltip="Observation",
                     popup = pop_info,
                     icon=folium.Icon(color="red"),
-                    ).add_to(map)
+                    ).add_to(feature_group_Observations)
     
+    # Adding Tiles ################
     folium.raster_layers.TileLayer('Stamen Terrain').add_to(map)
     folium.raster_layers.TileLayer('Stamen Toner').add_to(map)
-    
-    # Esri map
     folium.TileLayer(
         tiles = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
         attr = 'Esri',
@@ -91,11 +94,18 @@ def home(request):
         overlay = False,
         control = True
        ).add_to(map)
-    folium.LayerControl(collapsed=False).add_to(map)
-    #map.save("tests.html")
+    
+    ##################################
+    
+    #Adding feature groups to map
+    feature_group_Observations.add_to(map)
+    feature_group_demoPlots.add_to(map)
+    feature_group_training_sessions.add_to(map)
+
+
+    folium.LayerControl().add_to(map)
     map =  map._repr_html_()
     context = {'map': map, 'programs': programs}
-
     return render(request, 'dashboard/index.html', context)
 
 

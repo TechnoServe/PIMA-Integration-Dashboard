@@ -87,3 +87,9 @@ local_settings.py
 
 .env
 db.sqlite3
+
+# Static files 
+staticfiles/
+
+# Google Engine account keys
+pima-salesforceintegration-b62e52a0c158.json

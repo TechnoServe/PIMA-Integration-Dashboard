@@ -16,13 +16,17 @@
                 </div>
                 <div class="col-2"></div>
                 <div class="col-3">
-                    <span style="color:#333; font-weight:400; font-size:14px">Country: 
+                    <span style="color:#333; font-weight:400; font-size:14px">Program: 
                     <span><select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="height:42px; font-size:12px"></span>
-                        <option selected>Kenya</option>
-                        <option value="1">Ethiopia</option>
+                        <option selected>Select</option>
+
+                        {% for program in programs %}
+                            <option value="{{program.Id}}">{{ program.Name }}</option>
+                        {% endfor %}
+                        <!-- <option value="1">Ethiopia</option>
                         <option value="2">Uganda</option>
                         <option value="3">Rwanda</option>
-                        <option value="3">Burundi</option>
+                        <option value="3">Burundi</option> -->
                       </select>
                     </span>
                 </div>
@@ -30,12 +34,22 @@
             <div class="row">
                  <div class="col-12"> {{ map | safe }}</div> 
             </div>
+            <!-- <div class="row">
+                <div class="col-5"></div>
+                <div class="col-2">
+                    <p> Legend </p>
+                    <img src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/images/marker-icon.png" />
+                    
+                    <i class="fa-rotate-0 glyphicon glyphicon-info-sign  icon-white"></i>
+                    <div class="awesome-marker-icon-green awesome-marker leaflet-zoom-animated leaflet-interactive" style="margin-left: -17px; margin-top: -42px; width: 35px; height: 45px; transform: translate3d(338px, 397px, 0px); z-index: 397; outline: currentcolor none medium;" tabindex="0"><i class="fa-rotate-0 glyphicon glyphicon-info-sign  icon-white">icon</i></div>
+                    <div class="awesome-marker-icon-green awesome-marker leaflet-zoom-animated leaflet-interactive" style="margin-left: -17px; margin-top: -42px; width: 35px; height: 45px; transform: translate3d(338px, 397px, 0px); z-index: 397; outline: currentcolor none medium;" tabindex="0"><i class="fa-rotate-0 glyphicon glyphicon-info-sign  icon-white">icon</i></div>
+                    <div class="awesome-marker-icon-green awesome-marker leaflet-zoom-animated leaflet-interactive" style="margin-left: -17px; margin-top: -42px; width: 35px; height: 45px; transform: translate3d(338px, 397px, 0px); z-index: 397; outline: currentcolor none medium;" tabindex="0"><i class="fa-rotate-0 glyphicon glyphicon-info-sign  icon-white">icon</i></div> 
+                </div>
+                <div class="col-5"></div> 
+           </div> -->
         </div>     
     </div>
 </div>
-
-
-
 
 
 {% endblock %}

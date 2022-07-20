@@ -92,10 +92,10 @@ def home(request):
     #Programs
     programs = cache.get('Programs')
 
-
+    feature_group_Observations = folium.FeatureGroup(name="Observations")
     if observations is not None:
 
-        feature_group_Observations = folium.FeatureGroup(name="Observations")
+        
         for obs_ in observations:
             cord = [obs_.get('Observation_Location__Latitude__s'), obs_.get('Observation_Location__Longitude__s')]
             if(cord[0] is None or cord[1] is None): continue

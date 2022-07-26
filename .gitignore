@@ -93,3 +93,9 @@ staticfiles/
 
 # Google Engine account keys
 pima-salesforceintegration-b62e52a0c158.json
+
+#SQLITE CHANGES
+db.sqlite3-journal
+
+#VSCODE
+.vscode/

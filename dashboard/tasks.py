@@ -20,6 +20,40 @@ def getToken():
     return result.json().get('access_token')
 
 
+###################################################################
+@shared_task(bind=True)
+def getProgramsAndProjects(self):
+    #PROJECT_FORMAT: {'project_name':'program_name', ...}
+    #PROGRAM_FORMAT: {'id':'program_name', ...}
+
+
+    TOKEN = getToken()
+    
+    Projects = dict()
+    Programs = dict()
+    
+    sf = Salesforce(instance_url=f'https://{SALESFORCE_INSTANCE}', session_id=TOKEN)
+
+    programs = sf.query_all("SELECT Id,Name FROM Program__c WHERE IsDeleted=false")
+    projects = sf.query_all("SELECT Name,Program__c FROM Project__c WHERE IsDeleted=false")
+    
+    programs =  programs.get('records')
+    projects =  projects.get('records')
+
+    for program in programs:
+        Programs[program.get('Id')] = program.get('Name')
+    
+    for project in projects:
+        Projects[project.get('Name')] = Programs.get(project.get('Program__c'))
+
+    cache.set('Projects', Projects)
+    cache.set('Programs', Programs)
+
+    return "DONE"
+##############################################################################
+
+
+
 @shared_task(bind=True)
 def getObservations(self):
     
@@ -40,9 +74,14 @@ def getObservations(self):
 
     #Cache to REDIS
     cache.set('Observations', records)
+    
+    # Get the orject to help find the program
+    Projects =  cache.get('Projects')
 
     #Add to SQLite
     Observation_c.objects.all().delete() #Delete all records before adding new
+
+    
     
     for record in records:
         if(record.get('Observation_Location__Latitude__s') == None or record.get('Observation_Location__Longitude__s') == None): continue
@@ -56,6 +95,7 @@ def getObservations(self):
             Salesforce_Id=record.get('Id'),
             Date_c = date_,
             Project_Name_c =  record.get('Project_Name__c'),
+            Program_c = Projects.get(record.get('Program__c')),
             Observation_Location_Latitude_s = record.get('Observation_Location__Latitude__s'),
             Observation_Location_Longitude_s = record.get('Observation_Location__Longitude__s'),
             Trainer_c = record.get('Trainer__c'),
@@ -72,7 +112,7 @@ def getTrainingSessions(self):
     TOKEN = getToken()
 
     sf = Salesforce(instance_url=f'https://{SALESFORCE_INSTANCE}', session_id=TOKEN)    
-    TSs = sf.query("SELECT Id,Date__c,Project_Name__c,Location_GPS__Latitude__s,Location_GPS__Longitude__s, Number_in_Attendance__c,Module_Name__c,Trainer__c,Training_Group__c FROM Training_Session__c WHERE IsDeleted=false")
+    TSs = sf.query("SELECT Id,Date__c,Project_Name__c,Location_GPS__Latitude__s,Location_GPS__Longitude__s, Number_in_Attendance__c,Module_Name__c,Trainer__c,Training_Group__c,Program__c FROM Training_Session__c WHERE IsDeleted=false")
     
     records.extend(TSs.get('records'))
 
@@ -100,10 +140,11 @@ def getTrainingSessions(self):
         Training_Session_c.objects.create(
             Salesforce_Id=record.get('Id'),
             Date_c = date_,
-            Project_Name_c =  record.get('Project_Name__c'),
             Location_GPS_Latitude_s = record.get('Location_GPS__Latitude__s'),
             Location_GPS_Longitude_s = record.get('Location_GPS__Longitude__s'),
+            Project_Name_c = record.get('Project_Name__c'),
             Trainer_c = record.get('Trainer__c'),
+            Program_c = record.get('Program__c'),
             Training_Group_c = record.get('Training_Group__c'),
             Module_Name_c = record.get('Module_Name__c'),
             Number_in_Attendance_c = record.get('Number_in_Attendance__c')
@@ -113,26 +154,3 @@ def getTrainingSessions(self):
 
 
 
-###################################################################
-@shared_task(bind=True)
-def getPrograms(self):
-
-    TOKEN = getToken()
-    
-    Programs = list()
-    holder = dict()
-    
-    sf = Salesforce(instance_url=f'https://{SALESFORCE_INSTANCE}', session_id=TOKEN)
-    programs = sf.query_all("SELECT Id,Name FROM Program__c")
-    
-    program_records =  programs.get('records')
-    
-
-    for row in program_records:
-        holder['Id'] = row.get('Id')
-        holder['Name'] = row.get('Name')
-        Programs.append(holder)
-        holder = {}
-
-    cache.set('Programs', Programs)
-    return "DONE"

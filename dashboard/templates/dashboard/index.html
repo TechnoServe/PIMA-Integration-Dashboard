@@ -18,22 +18,20 @@
                             <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 8px;"><b>Note:</b> <i>Synced every one hour</i></p>
                         </div>
                     </div>
-                    <!-- <div class="row">
-                        <div class="col-12"> {{ map | safe }}</div> 
-                    </div> -->
                 </div>
                 
             </div>
 
             <div class="row">
                 <div class="col-9">
-                    <div class="row">
-                        {{ map | safe }}
-                    </div>
+                    <div class="row"> {{ map | safe }} </div>
                 </div>
                 <div class="col-3">
                     <div class="row">
-                        <form>
+                        <form method="POST" action="/">
+
+                            {% csrf_token %}
+
                             <div class="row" >
                                 <div class="col-12">
                                     <span style="color:#000000; font-weight:900; font-size:14px">PROGRAMs: </span>
@@ -43,9 +41,9 @@
                                 <div class="col-12">
                                     {% for program in programs %}
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            <span style="color:#333; font-weight:400; font-size:12px"> {{program.Name}} </span>
+                                        <input name="programs" class="form-check-input" type="checkbox" value="{{program}}" id="{{program}}"/>
+                                        <label class="form-check-label" for="{{program}}">
+                                            <span style="color:#333; font-weight:400; font-size:12px"> {{program}} </span>
                                         </label>
                                     </div>
                                     {% endfor %}
@@ -60,11 +58,11 @@
                             <div class="row" style="padding:0px 2px 0px 0px">
                                 <div class="col-6">
                                     <span style="color:#333; font-weight:400; font-size:12px">From:</span>
-                                    <input type="date" class="form-control" placeholder="From" aria-label="Username" aria-describedby="basic-addon1" style="color:#333; font-weight:400; font-size:12px">
+                                    <input type="date" name="start_date" class="form-control" placeholder="From" aria-label="Username" aria-describedby="basic-addon1" style="color:#333; font-weight:400; font-size:12px">
                                 </div>
                                 <div class="col-6">
                                     <span style="color:#333; font-weight:400; font-size:12px">To:</span>
-                                    <input type="date" class="form-control" placeholder="To" aria-label="Username" aria-describedby="basic-addon1" style="color:#333; font-weight:400; font-size:12px">
+                                    <input type="date" name="end_date" class="form-control" placeholder="To" aria-label="Username" aria-describedby="basic-addon1" style="color:#333; font-weight:400; font-size:12px">
                                 </div> 
                             </div>
     
@@ -77,8 +75,9 @@
                             <div class="row" style="padding:0px 48px 0px 0px">
                                 <div class="col-12">
                                     <select class="form-select" style="color:#333; font-weight:400; font-size:12px">
+                                        <option selected>--Select--</option>
                                         {% for region in regions %}
-                                        <option value="1">
+                                        <option value="{{region}}" disabled>
                                             {{region}}
                                         </option>
                                         {% endfor %}
@@ -91,10 +90,9 @@
                                     <button type="submit" class="btn btn-light" style="font-size: 12px; padding: 8px 32px; color: #333;"> CLEAR </button>
                                 </div>
                                 <div class="col-6">
-                                    <button type="submit" class="btn btn-outline-primary" style="font-size: 12px; padding: 8px 32px"> VIEW </button>
+                                    <button  onclick="myFunction()" class="btn btn-outline-primary" style="font-size: 12px; padding: 8px 32px"> VIEW </button>
                                 </div> 
                             </div>
-    
                         </form>
                     </div>
                 </div>
@@ -102,6 +100,11 @@
         </div>     
     </div>
 </div>
-
+<script>
+    function myFunction() {
+  console.log('Test')
+  // code here CAN use carName
+}
+</script>
 
 {% endblock %}

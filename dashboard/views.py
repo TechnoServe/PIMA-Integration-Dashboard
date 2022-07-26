@@ -11,9 +11,9 @@ from .utils import basemaps
 from .legends import macro_en
 
 START_LOCATION = [0.5050067786194596, 30.879391642411665] # Need to be changed
+
 # GCP_credentials = ee.ServiceAccountCredentials(env('GOOGLE_SERVICE_ACCOUNT'), env('PRIVATE_KEY'))
 # ee.Initialize(GCP_credentials)
-
 
 # def add_ee_layer(self, ee_image_object, vis_params, name):
 #   map_id_dict = ee.Image(ee_image_object).getMapId(vis_params)
@@ -90,7 +90,8 @@ def index(request):
 
         map =  map._repr_html_()
         programs = cache.get('Programs')
-        context = {'map': map, 'programs': programs}
+        regions = ['East Africa', 'West Africa', 'Southern Africa', 'India', 'Latino America']
+        context = {'map': map, 'programs': programs, 'regions': regions}
         return render(request, 'dashboard/index.html', context)
 
 

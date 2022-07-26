@@ -19,11 +19,13 @@ class Observation_c(models.Model):
 
 class Training_Session_c(models.Model):
     Salesforce_Id =  models.CharField(max_length=30)
-    Date_c = models.DateField()
+    Date_c = models.DateField(blank=True, null=True)
     Project_Name_c =  models.CharField(max_length=20, blank=True, null=True)
     Location_GPS_Latitude_s = models.FloatField()
     Location_GPS_Longitude_s = models.FloatField()
     Number_in_Attendance_c = models.IntegerField(blank=True, null=True)
+    Training_Group_c = models.CharField(max_length=30,blank=True, null=True)
+    Trainer_c = models.CharField(max_length=30, blank=True, null=True)
     Module_Name_c = models.CharField(max_length=30, blank=True, null=True)
 
 

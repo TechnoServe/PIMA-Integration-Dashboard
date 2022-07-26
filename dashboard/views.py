@@ -5,7 +5,7 @@ import datetime
 from django.core.cache import cache
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
-from dashboard.models import Observation_c
+from dashboard.models import Observation_c, Training_Session_c
 from PIMA_Dashboard.settings import BASE_DIR, env
 from .utils import basemaps
 from .legends import macro_en
@@ -34,9 +34,12 @@ def index(request):
         start_date = end_date - datetime.timedelta(days=365)
 
         Observations = Observation_c.objects.filter(Date_c__range=[start_date, end_date])
+        TrainingSessions = Training_Session_c.objects.filter(Date_c__range=[start_date, end_date])
         
         feature_group_Observations = folium.FeatureGroup(name="Observations")
+        feature_group_training_sessions = folium.FeatureGroup(name="Training Sessions")
         
+        #Observations
         for Observation in Observations:
             cord = [Observation.Observation_Location_Latitude_s, Observation.Observation_Location_Longitude_s]
             if(cord[0] is None or cord[1] is None): continue
@@ -44,15 +47,36 @@ def index(request):
             date_ = Observation.Date_c
             trainer_ = Observation.Trainer_c
             project_ = Observation.Project_Name_c
-            pop_info = f'<i>Date</i>:<b>{date_}</b><br><i>Trainer</i>:<b>{trainer_}</b><br><i>Project</i>:<b>{project_}</b><br><img src="https://www.technoserve.org/wp-content/uploads/2021/01/CajuLab-photo-1-300x225.png"/>'
+            participants_ = Observation.Number_of_Participants_c
+            pop_info = f'<i>Date</i>:<b>{date_}</b><br><i>Trainer</i>:<b>{trainer_}</b><br><i>Project</i>:<b>{project_}</b></br><i>Participants</i>:<b>{participants_}</b><br><img src="https://www.technoserve.org/wp-content/uploads/2021/01/CajuLab-photo-1-300x225.png"/>'
             folium.Marker(
                     location=cord,
                     tooltip="Observation",
                     popup = pop_info,
                     icon=folium.Icon(color="red"),
                     ).add_to(feature_group_Observations)
-
         feature_group_Observations.add_to(map)
+
+        #Training Sessions
+        for TrainingSession in TrainingSessions:
+            cord = [TrainingSession.Location_GPS_Latitude_s, TrainingSession.Location_GPS_Longitude_s]
+            if(cord[0] is None or cord[1] is None): continue
+
+            date_ = TrainingSession.Date_c
+            trainer_ = TrainingSession.Trainer_c
+            group_ = TrainingSession.Training_Group_c
+            module_ = TrainingSession.Module_Name_c
+            project_ = TrainingSession.Project_Name_c
+            attendance_ = TrainingSession.Number_in_Attendance_c
+            pop_info = f'<i>Date</i>:<b>{date_}</b><br><i>Trainer</i>:<b>{trainer_}</b><br><i>Module</i>:<b>{module_}</b><br><i>Attendance</i>:<b>{attendance_}</b><br><i>Group</i>:<b>{group_}</b><br><i>Project</i>:<b>{project_}</b><br><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHYRZU5OjdnP0OKZWKIFy1aCnnlqRaVmVre2t3k3BVkVhIXYKLJjFe5Ng1mOXgWfVex2Y&usqp=CAU"/>'
+            folium.Marker(
+                location=cord,
+                tooltip="Training Session",
+                popup = pop_info,
+                icon= folium.Icon(color="blue"),
+                ).add_to(feature_group_training_sessions)
+        feature_group_training_sessions.add_to(map)
+
 
 
         #Map Layers

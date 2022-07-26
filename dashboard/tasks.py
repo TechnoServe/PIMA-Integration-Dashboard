@@ -4,7 +4,7 @@ from celery import shared_task
 from django.core.cache import cache
 from PIMA_Dashboard.settings import env
 from simple_salesforce import Salesforce
-from dashboard.models import Observation_c
+from dashboard.models import Observation_c, Training_Session_c
 
 SALESFORCE_INSTANCE = env('SALESFORCE_INSTANCE')
 
@@ -63,26 +63,57 @@ def getObservations(self):
         )
 
     return "DONE"
+##################################################################
 
-
-    # Obs_records =  Obs_result.get('records')
-
-    # for row in Obs_records:
-    #     holder['Id'] = row.get('Id')
-    #     holder['Project_Name__c'] = row.get('Project_Name__c')
-    #     holder['Trainer__c'] = row.get('Trainer__c') #trainer = sf.Contact.get('0031o00001Zxz7pAAB')
-    #     holder['Observation_Location__Latitude__s'] =  row.get('Observation_Location__Latitude__s')
-    #     holder['Observation_Location__Longitude__s'] = row.get('Observation_Location__Longitude__s')
-    #     holder['Date__c'] = row.get('Date__c')
-    #     Observations.append(holder)
-    #     holder = {}
+@shared_task(bind=True)
+def getTrainingSessions(self):
     
-    # #Write to caches
-    # cache.set('Observations', Observations)
-    # return "Done"
+    records = list()
+    TOKEN = getToken()
+
+    sf = Salesforce(instance_url=f'https://{SALESFORCE_INSTANCE}', session_id=TOKEN)    
+    TSs = sf.query("SELECT Id,Date__c,Project_Name__c,Location_GPS__Latitude__s,Location_GPS__Longitude__s, Number_in_Attendance__c,Module_Name__c,Trainer__c,Training_Group__c FROM Training_Session__c WHERE IsDeleted=false")
+    
+    records.extend(TSs.get('records'))
+
+    if TSs.get('done')is False:
+        DONE = False
+        while not DONE:
+            TSs = sf.query_more(TSs.get('nextRecordsUrl'), True)
+            records.extend(TSs.get('records'))
+            DONE = TSs.get('done')
+
+    #Cache to REDIS
+    cache.set('TrainingSessions', records)
+
+    #Add to SQLite
+    Training_Session_c.objects.all().delete() #Delete all records before adding new
+    
+    for record in records:
+        if(record.get('Location_GPS__Latitude__s') == None or record.get('Location_GPS__Longitude__s') == None): continue
+        
+        try:
+            date_ = datetime.date.fromisoformat(record.get('Date__c'))
+        except:
+            date_ = None
+
+        Training_Session_c.objects.create(
+            Salesforce_Id=record.get('Id'),
+            Date_c = date_,
+            Project_Name_c =  record.get('Project_Name__c'),
+            Location_GPS_Latitude_s = record.get('Location_GPS__Latitude__s'),
+            Location_GPS_Longitude_s = record.get('Location_GPS__Longitude__s'),
+            Trainer_c = record.get('Trainer__c'),
+            Training_Group_c = record.get('Training_Group__c'),
+            Module_Name_c = record.get('Module_Name__c'),
+            Number_in_Attendance_c = record.get('Number_in_Attendance__c')
+        )
+
+    return "DONE"
 
 
 
+###################################################################
 @shared_task(bind=True)
 def getPrograms(self):
 
@@ -104,4 +135,4 @@ def getPrograms(self):
         holder = {}
 
     cache.set('Programs', Programs)
-    return "Done"
+    return "DONE"

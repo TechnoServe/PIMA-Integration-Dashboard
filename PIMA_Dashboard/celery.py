@@ -24,7 +24,7 @@ app.conf.beat_schedule = {
         'schedule' : crontab(minute='*/10'),
     },
     'fetch-programs-from-salesforce': {
-        'task' : 'dashboard.tasks.getPrograms',
+        'task' : 'dashboard.tasks.getProgramsAndProjects',
         'schedule' : crontab(minute='*/10'),
     },
     'fetch-salesforce-trainingSessions-every-60mins': {

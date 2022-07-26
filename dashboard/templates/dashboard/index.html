@@ -5,35 +5,110 @@
 
 <div class="container-fluid">
     <div class="container" style="padding:64px 0">
-        <div class="card"  style="height: 100vh">
-            <div class="row" style="padding:32px">
-                <div class="col-1">
-                    <img src='https://www.technoserve.org/wp-content/themes/technoserve/assets/img/logomark-full.svg' height='56px'/>
-                </div>
-                <div class="col-6" style="text-align: left;">
-                    <p style="color:#000000; font-weight:900; font-size:24px; margin-bottom: 0px;">PIMA Dashboard</p>
-                    <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 8px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                </div>
-                <div class="col-2"></div>
-                <div class="col-3">
-                    <span style="color:#333; font-weight:400; font-size:14px">Program: 
-                    <span><select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="height:42px; font-size:12px"></span>
-                        <option selected>Select</option>
-
-                        {% for program in programs %}
-                            <option value="{{program.Id}}">{{ program.Name }}</option>
-                        {% endfor %}
-                        <!-- <option value="1">Ethiopia</option>
-                        <option value="2">Uganda</option>
-                        <option value="3">Rwanda</option>
-                        <option value="3">Burundi</option> -->
-                      </select>
-                    </span>
-                </div>
-            </div>
+        <div class="card"  style="height: 100%">
             <div class="row">
-                 <div class="col-12"> {{ map | safe }}</div> 
+                <div class="col-8">
+                    <div class="row" style="padding:32px">
+                        <div class="col-1">
+                            <img src='https://www.technoserve.org/wp-content/themes/technoserve/assets/img/logomark-full.svg' height='56px'/>
+                        </div>
+                        <div class="col-11" style="text-align: left;">
+                            <p style="color:#000000; font-weight:900; font-size:24px; margin-bottom: 0px;">PIMA Dashboard</p>
+                            <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 8px;">Interactive dashboard that uses Salesforce data to map Technoserve extension service data such as farm visits, training sessions, training observations, and beneficiaries' farms, to allow real-time monitoring across regions</p>
+                            <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 8px;"><b>Note:</b> <i>Synced every one hour</i></p>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                         <div class="col-12"> {{ map | safe }}</div> 
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="row" style="padding:48px 48px 0px 0px">
+                        <div class="col-12">
+                            <span style="color:#000000; font-weight:900; font-size:14px">DATE RANGE: </span>
+                        </div>
+                    </div>
+                        <div class="row" style="padding:8px 48px 16px 0px">
+                            <div class="col-6">
+                                <span style="color:#333; font-weight:400; font-size:12px">From:</span>
+                                <input type="date" class="form-control" placeholder="From" aria-label="Username" aria-describedby="basic-addon1">
+                            </div>
+                            <div class="col-6">
+                                <span style="color:#333; font-weight:400; font-size:12px">To:</span>
+                                <input type="date" class="form-control" placeholder="To" aria-label="Username" aria-describedby="basic-addon1">
+                            </div>
+                               
+                        </div>
+                    
+                        <div class="row">
+                            <div class="col-12">
+                             <ul style="padding: 32px 48px 8px 0px;">
+                                <li class="list-group-item d-flex justify-content-between align-items-center" style="margin-bottom:16px">
+                                    <span style="color:#000000; font-weight:900; font-size:14px">PROGRAM: </span>
+                                </li>
+                                {% for program in programs %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center" style=" color: #333; margin-bottom:8px; font-size:12px">
+                                    {{ program.Name }}
+                                  <input type="checkbox" aria-label="Checkbox for following text input">
+                                 
+                                </li>
+                                {% endfor %}
+                              
+                               
+                              </ul>   
+                            </div>
+                            <div class="col-12">
+                                <ul style="padding: 32px 48px 8px 0px;">
+                                   <li class="list-group-item d-flex justify-content-between align-items-center" style="margin-bottom:16px">
+                                       <span style="color:#000000; font-weight:900; font-size:14px">REGION: </span>
+                                   </li>
+                                  
+                                   <li class="list-group-item d-flex justify-content-between align-items-center" style=" color: #333; margin-bottom:8px; font-size:12px">
+                                     East Africa
+                                     <input type="checkbox" aria-label="Checkbox for following text input">
+                                   </li>
+                                   <li class="list-group-item d-flex justify-content-between align-items-center" style=" color: #333; margin-bottom:8px; font-size:12px">
+                                    West Africa
+                                    <input type="checkbox" aria-label="Checkbox for following text input">
+                                  </li>
+                                  <li class="list-group-item d-flex justify-content-between align-items-center" style=" color: #333; margin-bottom:8px; font-size:12px">
+                                    Southern Africa
+                                    <input type="checkbox" aria-label="Checkbox for following text input">
+                                  </li>
+                                  <li class="list-group-item d-flex justify-content-between align-items-center" style=" color: #333; margin-bottom:8px; font-size:12px">
+                                    India
+                                    <input type="checkbox" aria-label="Checkbox for following text input">
+                                  </li>
+                                   <li class="list-group-item d-flex justify-content-between align-items-center disabled" style=" color: #333; margin-bottom:8px; font-size:12px">
+                                    Latino America
+                                    <input type="checkbox" aria-label="Checkbox for following text input">
+                                   
+                                  </li>
+                                  
+                                 
+                                  
+                                 </ul>   
+                               </div>
+                               <div class="row" style="padding: 8px 48px 32px 0px;">
+                                <div class="col-8">
+                                    <button type="button" class="btn btn-light" style="font-size: 12px;
+                                    padding: 8px 32px;
+                                    background-color: transparent;
+                                    color: #333;">RESET</button>
+                                </div>
+                                <div class="col-4">
+                                    <button type="button" class="btn btn-primary" style="font-size: 12px;
+                                    padding: 8px 32px;">VIEW</button>
+                                </div>
+                               
+                               
+                               </div>
+                            
+                        </div>
+                </div>
             </div>
+            
             <!-- <div class="row">
                 <div class="col-5"></div>
                 <div class="col-2">

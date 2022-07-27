@@ -4,52 +4,107 @@
 
 
 <div class="container-fluid">
-    <div class="container" style="padding:64px 0">
-        <div class="card"  style="height: 100vh">
-            <div class="row" style="padding:32px">
-                <div class="col-1">
-                    <img src='https://www.technoserve.org/wp-content/themes/technoserve/assets/img/logomark-full.svg' height='56px'/>
-                </div>
-                <div class="col-6" style="text-align: left;">
-                    <p style="color:#000000; font-weight:900; font-size:24px; margin-bottom: 0px;">PIMA Dashboard</p>
-                    <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 8px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-                </div>
-                <div class="col-2"></div>
-                <div class="col-3">
-                    <span style="color:#333; font-weight:400; font-size:14px">Program: 
-                    <span><select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="height:42px; font-size:12px"></span>
-                        <option selected>Select</option>
-
-                        {% for program in programs %}
-                            <option value="{{program.Id}}">{{ program.Name }}</option>
-                        {% endfor %}
-                        <!-- <option value="1">Ethiopia</option>
-                        <option value="2">Uganda</option>
-                        <option value="3">Rwanda</option>
-                        <option value="3">Burundi</option> -->
-                      </select>
-                    </span>
-                </div>
-            </div>
+    <div class="container" style="padding:32px 0">
+        <div class="card"  style="height: 100%">
             <div class="row">
-                 <div class="col-12"> {{ map | safe }}</div> 
-            </div>
-            <!-- <div class="row">
-                <div class="col-5"></div>
-                <div class="col-2">
-                    <p> Legend </p>
-                    <img src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/images/marker-icon.png" />
-                    
-                    <i class="fa-rotate-0 glyphicon glyphicon-info-sign  icon-white"></i>
-                    <div class="awesome-marker-icon-green awesome-marker leaflet-zoom-animated leaflet-interactive" style="margin-left: -17px; margin-top: -42px; width: 35px; height: 45px; transform: translate3d(338px, 397px, 0px); z-index: 397; outline: currentcolor none medium;" tabindex="0"><i class="fa-rotate-0 glyphicon glyphicon-info-sign  icon-white">icon</i></div>
-                    <div class="awesome-marker-icon-green awesome-marker leaflet-zoom-animated leaflet-interactive" style="margin-left: -17px; margin-top: -42px; width: 35px; height: 45px; transform: translate3d(338px, 397px, 0px); z-index: 397; outline: currentcolor none medium;" tabindex="0"><i class="fa-rotate-0 glyphicon glyphicon-info-sign  icon-white">icon</i></div>
-                    <div class="awesome-marker-icon-green awesome-marker leaflet-zoom-animated leaflet-interactive" style="margin-left: -17px; margin-top: -42px; width: 35px; height: 45px; transform: translate3d(338px, 397px, 0px); z-index: 397; outline: currentcolor none medium;" tabindex="0"><i class="fa-rotate-0 glyphicon glyphicon-info-sign  icon-white">icon</i></div> 
+                <div class="col-12">
+                    <div class="row" style="padding:32px">
+                        <div class="col-2">
+                            <img src='https://www.technoserve.org/wp-content/themes/technoserve/assets/img/logomark-full.svg' height='56px'/>
+                        </div>
+                        <div class="col-10" style="text-align: left;">
+                            <p style="color:#000000; font-weight:900; font-size:24px; margin-bottom: 0px;">PIMA Dashboard</p>
+                            <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 8px;">Interactive dashboard that uses Salesforce data to map Technoserve extension service data such as farm visits, training sessions, training observations, and beneficiaries' farms, to allow real-time monitoring across regions</p>
+                            <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 8px;"><b>Note:</b> <i>Synced every one hour</i></p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-5"></div> 
-           </div> -->
+                
+            </div>
+
+            <div class="row">
+                <div class="col-9">
+                    <div class="row"> {{ map | safe }} </div>
+                </div>
+                <div class="col-3">
+                    <div class="row">
+                        <form method="POST" action="/">
+
+                            {% csrf_token %}
+
+                            <div class="row" >
+                                <div class="col-12">
+                                    <span style="color:#000000; font-weight:900; font-size:14px">PROGRAMs: </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    {% for program in programs %}
+                                    <div class="form-check">
+                                        <input name="programs" class="form-check-input" type="checkbox" value="{{program}}" id="{{program}}"/>
+                                        <label class="form-check-label" for="{{program}}">
+                                            <span style="color:#333; font-weight:400; font-size:12px"> {{program}} </span>
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <div class="row" style="padding:24px 0px 0px 0px">
+                                <div class="col-12">
+                                    <span style="color:#000000; font-weight:900; font-size:14px">DATE RANGE: </span>
+                                </div>
+                            </div>
+                            <div class="row" style="padding:0px 2px 0px 0px">
+                                <div class="col-6">
+                                    <span style="color:#333; font-weight:400; font-size:12px">From:</span>
+                                    <input type="date" name="start_date" class="form-control" placeholder="From" aria-label="Username" aria-describedby="basic-addon1" style="color:#333; font-weight:400; font-size:12px">
+                                </div>
+                                <div class="col-6">
+                                    <span style="color:#333; font-weight:400; font-size:12px">To:</span>
+                                    <input type="date" name="end_date" class="form-control" placeholder="To" aria-label="Username" aria-describedby="basic-addon1" style="color:#333; font-weight:400; font-size:12px">
+                                </div> 
+                            </div>
+    
+                            
+                            <div class="row" style="padding:24px 0px 0px 0px">
+                                <div class="col-12">
+                                    <span style="color:#000000; font-weight:900; font-size:14px">REGIONs: </span>
+                                </div>
+                            </div>
+                            <div class="row" style="padding:0px 48px 0px 0px">
+                                <div class="col-12">
+                                    <select class="form-select" style="color:#333; font-weight:400; font-size:12px">
+                                        <option selected>--Select--</option>
+                                        {% for region in regions %}
+                                        <option value="{{region}}" disabled>
+                                            {{region}}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+    
+                            <div class="row" style="padding:36px 24px 16px 0px">
+                                <div class="col-6">
+                                    <button type="submit" class="btn btn-light" style="font-size: 12px; padding: 8px 32px; color: #333;"> CLEAR </button>
+                                </div>
+                                <div class="col-6">
+                                    <button  onclick="myFunction()" class="btn btn-outline-primary" style="font-size: 12px; padding: 8px 32px"> VIEW </button>
+                                </div> 
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>     
     </div>
 </div>
-
+<script>
+    function myFunction() {
+  console.log('Test')
+  // code here CAN use carName
+}
+</script>
 
 {% endblock %}

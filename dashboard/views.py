@@ -10,7 +10,7 @@ from PIMA_Dashboard.settings import BASE_DIR, env
 from .utils import basemaps
 from .legends import macro_en
 
-START_LOCATION = [0.5050067786194596, 30.879391642411665] # Need to be changed
+START_LOCATION = [-0.9019047458079028, 1.093501788502551]
 
 # GCP_credentials = ee.ServiceAccountCredentials(env('GOOGLE_SERVICE_ACCOUNT'), env('PRIVATE_KEY'))
 # ee.Initialize(GCP_credentials)
@@ -32,7 +32,7 @@ def index(request):
     if request.method == 'GET':
         map = folium.Map(START_LOCATION, zoom_start=3)
         end_date = datetime.date.today()
-        start_date = end_date - datetime.timedelta(days=365)
+        start_date = end_date - datetime.timedelta(days=15)
 
         Observations = Observation_c.objects.filter(Date_c__range=[start_date, end_date])
         TrainingSessions = Training_Session_c.objects.filter(Date_c__range=[start_date, end_date])
@@ -84,7 +84,6 @@ def index(request):
         basemaps['Google Maps'].add_to(map)
         basemaps['Google Satellite'].add_to(map)
         basemaps['Esri Satellite'].add_to(map)
-        basemaps['Google Terrain'].add_to(map)
 
         map.add_child(folium.LayerControl())
         map.add_child(macro_en)
@@ -118,21 +117,18 @@ def index(request):
             
 
         if (len(start_date) == 0):
-            start_date = end_date - datetime.timedelta(days=365)
+            start_date = end_date - datetime.timedelta(days=530)
         else:
             start_date = datetime.date.fromisoformat(start_date)
             
 
         #Getting Programs
-        selected_programs = request.POST.get('programs')
-        print(type(selected_programs))
-        print(selected_programs)
+        selected_programs = request.POST.getlist('programs')
         
-        if selected_programs is None:
+        if (len(selected_programs) == 0):
             Observations = Observation_c.objects.filter(Date_c__range=[start_date, end_date])
             TrainingSessions = Training_Session_c.objects.filter(Date_c__range=[start_date, end_date])
-        
-        
+
         else:
             Observations = Observation_c.objects.filter(Date_c__range=[start_date, end_date]).filter(Program_c__in=selected_programs)
             TrainingSessions = Training_Session_c.objects.filter(Date_c__range=[start_date, end_date]).filter(Program_c__in=selected_programs)
@@ -185,14 +181,15 @@ def index(request):
         basemaps['Google Maps'].add_to(map)
         basemaps['Google Satellite'].add_to(map)
         basemaps['Esri Satellite'].add_to(map)
-        basemaps['Google Terrain'].add_to(map)
 
         map.add_child(folium.LayerControl())
         map.add_child(macro_en)
 
         map =  map._repr_html_()
+
         programs = cache.get('Programs')
         programs = list(programs.values())
+        
         regions = ['East Africa', 'West Africa', 'Southern Africa', 'India', 'Latino America']
         context = {'map': map, 'programs': programs, 'regions': regions}
         return render(request, 'dashboard/index.html', context)

@@ -81,8 +81,6 @@ def getObservations(self):
     #Add to SQLite
     Observation_c.objects.all().delete() #Delete all records before adding new
 
-    
-    
     for record in records:
         if(record.get('Observation_Location__Latitude__s') == None or record.get('Observation_Location__Longitude__s') == None): continue
         
@@ -95,7 +93,7 @@ def getObservations(self):
             Salesforce_Id=record.get('Id'),
             Date_c = date_,
             Project_Name_c =  record.get('Project_Name__c'),
-            Program_c = Projects.get(record.get('Program__c')),
+            Program_c = Projects.get(record.get('Project_Name__c')),
             Observation_Location_Latitude_s = record.get('Observation_Location__Latitude__s'),
             Observation_Location_Longitude_s = record.get('Observation_Location__Longitude__s'),
             Trainer_c = record.get('Trainer__c'),

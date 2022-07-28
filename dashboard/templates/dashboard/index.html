@@ -1,4 +1,5 @@
 {% extends "dashboard/base.html" %}
+{% load static %}
 
 {% block content %}
 
@@ -9,10 +10,10 @@
             <div class="row">
                 <div class="col-12">
                     <div class="row" style="padding:32px">
-                        <div class="col-2">
-                            <img src='https://www.technoserve.org/wp-content/themes/technoserve/assets/img/logomark-full.svg' height='56px'/>
+                        <div class="col-3">
+                            <img src="{% static 'images/TNS-Labs-Logo-v2.png' %}" alt="TNS-Logo" />
                         </div>
-                        <div class="col-10" style="text-align: left;">
+                        <div class="col-9" style="text-align: left;">
                             <p style="color:#000000; font-weight:900; font-size:24px; margin-bottom: 0px;">PIMA Dashboard</p>
                             <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 8px;">Interactive dashboard that uses Salesforce data to map Technoserve extension service data such as farm visits, training sessions, training observations, and beneficiaries' farms, to allow real-time monitoring across regions</p>
                             <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 8px;"><b>Note:</b> <i>Synced every one hour</i></p>
@@ -90,7 +91,7 @@
                                     <button type="submit" class="btn btn-light" style="font-size: 12px; padding: 8px 32px; color: #333;"> CLEAR </button>
                                 </div>
                                 <div class="col-6">
-                                    <button  onclick="myFunction()" class="btn btn-outline-primary" style="font-size: 12px; padding: 8px 32px"> VIEW </button>
+                                    <button  onclick="ClearFilter()" class="btn btn-outline-primary" style="font-size: 12px; padding: 8px 32px"> VIEW </button>
                                 </div> 
                             </div>
                         </form>
@@ -101,9 +102,8 @@
     </div>
 </div>
 <script>
-    function myFunction() {
-  console.log('Test')
-  // code here CAN use carName
+    function ClearFilter() {
+        console.log('Clear the table')
 }
 </script>
 

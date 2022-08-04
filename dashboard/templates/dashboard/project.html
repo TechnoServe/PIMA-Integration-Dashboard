@@ -1,0 +1,40 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="container" style="padding:18px 0px 0px 0px">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-1">
+                            <span style="color:#333; font-weight:400; font-size:12px">From:</span>
+                        </div>
+                        <div class="col-3">
+                            <!-- <span style="color:#333; font-weight:400; font-size:12px">From:</span> -->
+                            <input type="date" name="start_date" class="form-control" placeholder="From" aria-label="Username" aria-describedby="basic-addon1" style="color:#333; font-weight:400; font-size:12px">
+                        </div>
+                        <div class="col-1 text-end">
+                            <span style="color:#333; font-weight:400; font-size:12px">To:</span>
+                        </div>
+                        <div class="col-3">
+                            <!-- <span style="color:#333; font-weight:400; font-size:12px">To:</span> -->
+                            <input type="date" name="end_date" class="form-control" placeholder="To" aria-label="Username" aria-describedby="basic-addon1" style="color:#333; font-weight:400; font-size:12px">
+                        </div>
+                        <div class="col-4">
+                            <button class="btn btn-outline-primary" style="font-size: 12px"> VIEW </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="padding:18px 0px 0px 0px">
+                <div class="col-12">
+                    <div class="row"> {{ map | safe }} </div>
+                </div>
+            </div>
+    </div>
+</div>
+
+{% endblock %}

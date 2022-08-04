@@ -19,16 +19,20 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 
 #Celery beat Settings
 app.conf.beat_schedule = {
-    'fetch-salesforce-observations-every-60mins': {
-        'task' : 'dashboard.tasks.getObservations',
+    'fetch-salesforce-trainingObservations-every-60mins': {
+        'task' : 'dashboard.tasks.getTrainingObservations',
         'schedule' : crontab(minute='*/10'),
     },
-    'fetch-programs-from-salesforce': {
+    'fetch-programsAndprojects-from-salesforce': {
         'task' : 'dashboard.tasks.getProgramsAndProjects',
         'schedule' : crontab(minute='*/10'),
     },
     'fetch-salesforce-trainingSessions-every-60mins': {
         'task' : 'dashboard.tasks.getTrainingSessions',
+        'schedule' : crontab(minute='*/10'),
+    },
+    'fetch-demoPlots-every-60mins': {
+        'task' : 'dashboard.tasks.getDemoPlot',
         'schedule' : crontab(minute='*/10'),
     }
 }

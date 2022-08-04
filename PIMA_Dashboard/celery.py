@@ -29,7 +29,7 @@ app.conf.beat_schedule = {
     },
     'fetch-salesforce-trainingSessions-every-60mins': {
         'task' : 'dashboard.tasks.getTrainingSessions',
-        'schedule' : crontab(minute='*/10'),
+        'schedule' : crontab(minute='*/15'),
     },
     'fetch-demoPlots-every-60mins': {
         'task' : 'dashboard.tasks.getDemoPlot',

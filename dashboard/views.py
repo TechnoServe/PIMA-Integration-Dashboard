@@ -37,7 +37,7 @@ def index(request):
         basemaps['Google Satellite'].add_to(map)
 
         end_date = datetime.date.today()
-        start_date = end_date - datetime.timedelta(days=30) #A Month ago
+        start_date = end_date - datetime.timedelta(days=90) #3 months ago.
 
         TrainingObservations = TrainingObservation.objects.filter(Date_c__range=[start_date, end_date])
         TrainingSessions = TrainingSession.objects.filter(Date_c__range=[start_date, end_date])
@@ -144,7 +144,7 @@ def index(request):
             
 
         if (len(start_date) == 0):
-            start_date = end_date - datetime.timedelta(days=1825) # FIVE years ago
+            start_date = end_date - datetime.timedelta(days=3650) # 10 years ago
         else:
             start_date = datetime.date.fromisoformat(start_date)
             

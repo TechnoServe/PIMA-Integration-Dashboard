@@ -101,7 +101,7 @@ def index(request):
             trainer_ = demo_plot.Trainer_c
             project_ = demo_plot.Project_Name_c
             participants_ = demo_plot.Number_of_Participants_c
-            pop_info = f'<i>Date</i>:<b>{date_}</b><br><i>Trainer</i>:<b>{trainer_}</b><br><i>Project</i>:<b>{project_}</b></br><i>Participants</i>:<b>{participants_}</b>'
+            pop_info = f'<i>Date</i>:<b>{date_}</b><br><i>Trainer</i>:<b>{trainer_}</b><br><i>Project</i>:<b>{project_}</b></br><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVrI_jVThOXGGjISB_9vrPQsGm3V8R_k8hj33_WXDqo2jVa8irSGx0Tpj0XbRfdptazxw&usqp=CAU"/>'
             folium.Marker(
                     location=cord,
                     tooltip="Demo Plot",
@@ -221,7 +221,7 @@ def index(request):
             trainer_ = demo_plot.Trainer_c
             project_ = demo_plot.Project_Name_c
             participants_ = demo_plot.Number_of_Participants_c
-            pop_info = f'<i>Date</i>:<b>{date_}</b><br><i>Trainer</i>:<b>{trainer_}</b><br><i>Project</i>:<b>{project_}</b></br><i>Participants</i>:<b>{participants_}</b>'
+            pop_info = f'<i>Date</i>:<b>{date_}</b><br><i>Trainer</i>:<b>{trainer_}</b><br><i>Project</i>:<b>{project_}</b></br><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVrI_jVThOXGGjISB_9vrPQsGm3V8R_k8hj33_WXDqo2jVa8irSGx0Tpj0XbRfdptazxw&usqp=CAU"/>'
             folium.Marker(
                     location=cord,
                     tooltip="Demo Plot",
@@ -326,7 +326,7 @@ def project_details(request, slug=None):
             date_ = demo_plot.Date_c
             trainer_ = demo_plot.Trainer_c
             project_ = demo_plot.Project_Name_c
-            pop_info = f'<i>Date</i>:<b>{date_}</b><br><i>Agent</i>:<b>{trainer_}</b><br><i>Project</i>:<b>{project_}</b>'
+            pop_info = f'<i>Date</i>:<b>{date_}</b><br><i>Trainer</i>:<b>{trainer_}</b><br><i>Project</i>:<b>{project_}</b></br><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVrI_jVThOXGGjISB_9vrPQsGm3V8R_k8hj33_WXDqo2jVa8irSGx0Tpj0XbRfdptazxw&usqp=CAU"/>'
             folium.Marker(
                     location=cord,
                     tooltip="Demo Plot",

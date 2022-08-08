@@ -5,14 +5,21 @@
 
 <div class="container-fluid">
     <div class="container" style="padding:18px 0px 0px 0px">
-            <div class="row">
-                <div class="col-12 text-center">
-                    {% for project in projects %}
-                    <a href="/project/{{project}}" target="_blank">{{project}}</a> <br>
-                    {% endfor %}
-                </div>
+        <div class="row">
+            <div class="col-12">
+                <h2 style="padding:4px 0px 16px 0px">Projects list</h2>
             </div>
+        </div>
+        <div class="row">
+            {% for key, value in projects.items %}
+            <div class="col-sm-4">
+                <a href="/project/{{value}}" class="text-decoration-none" target="_blank">{{key}}</a>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
+
+
 
 {% endblock %}

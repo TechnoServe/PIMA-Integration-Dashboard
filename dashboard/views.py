@@ -353,9 +353,7 @@ def project_list(request):
     projects =  cache.get('Projects')
     projects_ = dict()
 
-    for proj in projects:
-        projects_[proj] = slugify(proj)
-    #projects_ = [slugify(proj) for proj in projects]
+    for proj in projects: projects_[proj] = slugify(proj)
     
     context = {'projects': projects_}
     return render(request, 'dashboard/project_list.html', context)

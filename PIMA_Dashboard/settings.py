@@ -87,11 +87,17 @@ WSGI_APPLICATION = 'PIMA_Dashboard.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        'OPTIONS': {
-            'timeout': 40,
-        },
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE':'django.db.backends.mysql',
+        'NAME': env('DBNAME'),
+        'USER': env('DBUSER'),
+        'PASSWORD': env('DBPASS'),
+        'HOST': env('DBHOST'),
+        'PORT': env('DBPORT'),
+        # 'OPTIONS': {
+        #     'timeout': 20,
+        # },
     }
 }
 

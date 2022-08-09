@@ -39,11 +39,10 @@ template_en = """
 <div class='legend-title'>Legend</div>
 <div class='legend-scale'>
   <ul class='legend-labels'>
-    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-info-sign&size=35&background=E7625F">&nbsp;&nbsp; Observations</li>
-    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-info-sign&size=35&background=0E86D4">&nbsp;&nbsp; Training Session</li>
+    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-info-sign&size=35&background=E7625F">&nbsp;&nbsp; Training Observation</li>
     <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-info-sign&size=35&background=32CD30">&nbsp;&nbsp; Demo Plots</li>
-    
-
+    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-info-sign&size=35&background=0E86D4">&nbsp;&nbsp; Training Session</li>
+    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-info-sign&size=35&background=FFBF00">&nbsp;&nbsp; Farm Visit</li>
   </ul>
 </div>
 </div>

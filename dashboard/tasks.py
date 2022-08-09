@@ -41,10 +41,16 @@ def getProgramsAndProjects(self):
     projects =  projects.get('records')
 
     for program in programs:
+        if('Coffee' not in program.get('Name')): continue
         Programs[program.get('Id')] = program.get('Name')
     
     for project in projects:
-        Projects[project.get('Name')] = Programs.get(project.get('Program__c'))
+        try:
+            Projects[project.get('Name')] = Programs[project.get('Program__c')]
+        except:
+            continue
+
+        #Projects[project.get('Name')] = Programs.get(project.get('Program__c'))
 
     cache.set('Projects', Projects)
     cache.set('Programs', Programs)

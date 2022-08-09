@@ -37,7 +37,7 @@ def index(request):
         basemaps['Google Satellite'].add_to(map)
 
         end_date = datetime.date.today()
-        start_date = end_date - datetime.timedelta(days=30) #A Month ago
+        start_date = end_date - datetime.timedelta(days=90) #3 months ago.
 
         TrainingObservations = TrainingObservation.objects.filter(Date_c__range=[start_date, end_date])
         TrainingSessions = TrainingSession.objects.filter(Date_c__range=[start_date, end_date])
@@ -101,7 +101,7 @@ def index(request):
             trainer_ = demo_plot.Trainer_c
             project_ = demo_plot.Project_Name_c
             participants_ = demo_plot.Number_of_Participants_c
-            pop_info = f'<i>Date</i>:<b>{date_}</b><br><i>Trainer</i>:<b>{trainer_}</b><br><i>Project</i>:<b>{project_}</b></br><i>Participants</i>:<b>{participants_}</b>'
+            pop_info = f'<i>Date</i>:<b>{date_}</b><br><i>Trainer</i>:<b>{trainer_}</b><br><i>Project</i>:<b>{project_}</b></br><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVrI_jVThOXGGjISB_9vrPQsGm3V8R_k8hj33_WXDqo2jVa8irSGx0Tpj0XbRfdptazxw&usqp=CAU"/>'
             folium.Marker(
                     location=cord,
                     tooltip="Demo Plot",
@@ -144,7 +144,7 @@ def index(request):
             
 
         if (len(start_date) == 0):
-            start_date = end_date - datetime.timedelta(days=1825) # FIVE years ago
+            start_date = end_date - datetime.timedelta(days=3650) # 10 years ago
         else:
             start_date = datetime.date.fromisoformat(start_date)
             
@@ -221,7 +221,7 @@ def index(request):
             trainer_ = demo_plot.Trainer_c
             project_ = demo_plot.Project_Name_c
             participants_ = demo_plot.Number_of_Participants_c
-            pop_info = f'<i>Date</i>:<b>{date_}</b><br><i>Trainer</i>:<b>{trainer_}</b><br><i>Project</i>:<b>{project_}</b></br><i>Participants</i>:<b>{participants_}</b>'
+            pop_info = f'<i>Date</i>:<b>{date_}</b><br><i>Trainer</i>:<b>{trainer_}</b><br><i>Project</i>:<b>{project_}</b></br><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVrI_jVThOXGGjISB_9vrPQsGm3V8R_k8hj33_WXDqo2jVa8irSGx0Tpj0XbRfdptazxw&usqp=CAU"/>'
             folium.Marker(
                     location=cord,
                     tooltip="Demo Plot",
@@ -326,7 +326,7 @@ def project_details(request, slug=None):
             date_ = demo_plot.Date_c
             trainer_ = demo_plot.Trainer_c
             project_ = demo_plot.Project_Name_c
-            pop_info = f'<i>Date</i>:<b>{date_}</b><br><i>Agent</i>:<b>{trainer_}</b><br><i>Project</i>:<b>{project_}</b>'
+            pop_info = f'<i>Date</i>:<b>{date_}</b><br><i>Trainer</i>:<b>{trainer_}</b><br><i>Project</i>:<b>{project_}</b></br><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVrI_jVThOXGGjISB_9vrPQsGm3V8R_k8hj33_WXDqo2jVa8irSGx0Tpj0XbRfdptazxw&usqp=CAU"/>'
             folium.Marker(
                     location=cord,
                     tooltip="Demo Plot",
@@ -351,7 +351,9 @@ def project_details(request, slug=None):
 def project_list(request):
 
     projects =  cache.get('Projects')
-    projects_ = [slugify(proj) for proj in projects]
+    projects_ = dict()
+
+    for proj in projects: projects_[proj] = slugify(proj)
     
     context = {'projects': projects_}
     return render(request, 'dashboard/project_list.html', context)

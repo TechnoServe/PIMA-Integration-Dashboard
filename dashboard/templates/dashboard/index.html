@@ -29,7 +29,7 @@
                 </div>
                 <div class="col-3">
                     <div class="row">
-                        <form method="POST" action="/">
+                        <form method="POST" action="/" id="filter-form">
 
                             {% csrf_token %}
 
@@ -42,7 +42,7 @@
                                 <div class="col-12">
                                     {% for program in programs %}
                                     <div class="form-check">
-                                        <input name="programs" class="form-check-input" type="checkbox" value="{{program}}" id="{{program}}"/>
+                                        <input name="programs" class="form-check-input" type="checkbox" value="{{program}}" id="{{program}}"  {% if program in selected_programs %} checked {% endif %}/>
                                         <label class="form-check-label" for="{{program}}">
                                             <span style="color:#333; font-weight:400; font-size:12px"> {{program}} </span>
                                         </label>
@@ -59,11 +59,11 @@
                             <div class="row" style="padding:0px 2px 0px 0px">
                                 <div class="col-6">
                                     <span style="color:#333; font-weight:400; font-size:12px">From:</span>
-                                    <input type="date" name="start_date" class="form-control" placeholder="From" aria-label="Username" aria-describedby="basic-addon1" style="color:#333; font-weight:400; font-size:12px">
+                                    <input type="date" name="start-date" class="form-control" placeholder="From" aria-label="Username" aria-describedby="basic-addon1" style="color:#333; font-weight:400; font-size:12px" {% if start_date %} value="{{start_date}}" {% endif %} >
                                 </div>
                                 <div class="col-6">
                                     <span style="color:#333; font-weight:400; font-size:12px">To:</span>
-                                    <input type="date" name="end_date" class="form-control" placeholder="To" aria-label="Username" aria-describedby="basic-addon1" style="color:#333; font-weight:400; font-size:12px">
+                                    <input type="date" name="end-date" class="form-control" placeholder="To" aria-label="Username" aria-describedby="basic-addon1" style="color:#333; font-weight:400; font-size:12px" {% if end_date %} value="{{end_date}}" {% endif %} >
                                 </div> 
                             </div>
     
@@ -88,10 +88,11 @@
     
                             <div class="row" style="padding:36px 24px 16px 0px">
                                 <div class="col-6">
-                                    <button type="submit" class="btn btn-light" style="font-size: 12px; padding: 8px 32px; color: #333;"> CLEAR </button>
+                                    <!-- <button  onclick="ClearForm()" class="btn btn-light" style="font-size: 12px; padding: 8px 32px; color: #333;"> CLEAR </button> -->
+                                    <a class="text-decoration-none"  href="/" style="font-size: 12px; padding: 8px 32px; color: #333;"> CLEAR </a>
                                 </div>
                                 <div class="col-6">
-                                    <button  onclick="ClearFilter()" class="btn btn-outline-primary" style="font-size: 12px; padding: 8px 32px"> VIEW </button>
+                                    <button class="btn btn-outline-primary" style="font-size: 12px; padding: 8px 32px"> VIEW </button>
                                 </div> 
                             </div>
                         </form>
@@ -111,9 +112,11 @@
     </div>
 </div>
 <script>
-    function ClearFilter() {
+    function ClearForm() {
         console.log('Clear the table')
-}
+        document.getElementById("filter-form").reset();
+        window.location = '/';
+        }
 </script>
 
 {% endblock %}

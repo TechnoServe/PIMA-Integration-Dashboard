@@ -12,6 +12,7 @@ from django.template.defaultfilters import slugify
 from PIMA_Dashboard.settings import BASE_DIR, env
 from .utils import basemaps
 from .legends import macro_en
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 START_LOCATION = [-0.9019047458079028, 1.093501788502551]
 
@@ -28,9 +29,8 @@ START_LOCATION = [-0.9019047458079028, 1.093501788502551]
 #       control=True
 #   ).add_to(self)
 
-
+@xframe_options_exempt
 def index(request):
-    
     
     if request.method == 'GET':
         map = folium.Map(START_LOCATION, tiles=None, zoom_start=3)
@@ -134,23 +134,26 @@ def index(request):
         basemaps['Google Satellite'].add_to(map)
 
         #Getting Dates
-        end_date = request.POST.get('end_date')
-        start_date = request.POST.get('start_date')
+        end_date_ = request.POST.get('end-date')
+        start_date_ = request.POST.get('start-date')
 
-        if(len(end_date) == 0):
+        if(len(end_date_) == 0):
             end_date = datetime.date.today()
         else:
-            end_date = datetime.date.fromisoformat(end_date)
+            end_date = datetime.date.fromisoformat(end_date_)
+            
             
 
-        if (len(start_date) == 0):
+        if (len(start_date_) == 0):
             start_date = end_date - datetime.timedelta(days=3650) # 10 years ago
         else:
-            start_date = datetime.date.fromisoformat(start_date)
+            start_date = datetime.date.fromisoformat(start_date_)
+            
             
 
         #Getting Programs
         selected_programs = request.POST.getlist('programs')
+        
         
         if (len(selected_programs) == 0):
             TrainingObservations = TrainingObservation.objects.filter(Date_c__range=[start_date, end_date])
@@ -246,11 +249,19 @@ def index(request):
         programs = list(programs.values())
         
         regions = ['East Africa', 'West Africa', 'Southern Africa', 'India', 'Latino America']
-        context = {'map': map, 'programs': programs, 'regions': regions}
+        
+        context = {
+            'map': map,
+            'programs': programs,
+            'regions': regions,
+            'selected_programs':selected_programs,
+            'start_date': start_date_,
+            'end_date': end_date_
+        }   
         return render(request, 'dashboard/index.html', context)
 
 
-
+@xframe_options_exempt
 def project_details(request, slug=None):
     
     #Set-up the map

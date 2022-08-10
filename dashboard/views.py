@@ -12,6 +12,7 @@ from django.template.defaultfilters import slugify
 from PIMA_Dashboard.settings import BASE_DIR, env
 from .utils import basemaps
 from .legends import macro_en
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 START_LOCATION = [-0.9019047458079028, 1.093501788502551]
 
@@ -28,9 +29,8 @@ START_LOCATION = [-0.9019047458079028, 1.093501788502551]
 #       control=True
 #   ).add_to(self)
 
-
+@xframe_options_exempt
 def index(request):
-    
     
     if request.method == 'GET':
         map = folium.Map(START_LOCATION, tiles=None, zoom_start=3)
@@ -261,7 +261,7 @@ def index(request):
         return render(request, 'dashboard/index.html', context)
 
 
-
+@xframe_options_exempt
 def project_details(request, slug=None):
     
     #Set-up the map

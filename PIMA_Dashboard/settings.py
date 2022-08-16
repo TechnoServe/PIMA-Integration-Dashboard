@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 
     #Added APPs
     'dashboard',
+    'accounts',
     'django_celery_results',
     'django_celery_beat',
 ]
@@ -177,3 +178,12 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = env('CELERY_TIMEZONE')
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+
+#Authentication User Model
+AUTH_USER_MODEL = 'accounts.User'
+
+#REDIRECTION
+#LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
+#LOGIN_URL = 'login'

@@ -1,19 +1,40 @@
 {% extends "registration/base.html" %}
-
-{% block title %}Log In{% endblock %}
-
+{% load static %}
+{% load crispy_forms_tags %}
 {% block content %}
-<h2>Create User</h2>
 
-{% if messages %}
-    {% for message in messages %}
-        {{message}}
-    {% endfor %}
-{% endif %}
+<div class="container-fluid">
+    <div class="container" style="padding:32px 0">
+        <!-- <div class="card"> -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="row" style="padding:32px 32px 18px 32px">
+                        <div class="col-3">
+                            <img src="{% static 'images/TNS-Labs-Logo-v2.png' %}" alt="TNS-Logo" />
+                        </div>
+                        <div class="col-9" style="text-align: left;">
+                            <p style="color:#000000; font-weight:900; font-size:24px; margin-bottom: 0px;">PIMA - Add User</p>
+                            <!-- <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 8px;">Interactive dashboard that uses Salesforce data to map Technoserve extension service data such as farm visits, training sessions, training observations, and beneficiaries' farms, to allow real-time monitoring across regions</p>
+                            <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 0rem;"><b>Note:</b> <i>Synced every one hour</i></p> -->
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Create</button>
-</form>
+            <div class="row" style="text-align: left; padding-top: 32px; padding-left: 32px;">
+                    
+                <!-- <a style="font-weight:400; font-size:48px; margin-bottom: 8px;" href="{% url 'create_user' %}" class="">Add User</a> -->
+                    
+
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ next }}">{{ form|crispy }}
+                    <button type="submit" class="btn btn-primary btn-block">Create</button>
+                </form>
+            </div>
+        <!-- </div> -->
+    </div>
+</div>
+
 {% endblock %}

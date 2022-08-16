@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'accounts',
     'django_celery_results',
     'django_celery_beat',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [

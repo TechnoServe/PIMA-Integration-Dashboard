@@ -31,6 +31,7 @@ START_LOCATION = [-0.9019047458079028, 1.093501788502551]
 #   ).add_to(self)
 
 @xframe_options_exempt
+@login_required
 def index(request):
     
     if request.method == 'GET':

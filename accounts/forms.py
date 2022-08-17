@@ -1,6 +1,8 @@
+from email.policy import default
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.utils.translation import gettext_lazy as _
 #from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 from .models import User
@@ -12,6 +14,8 @@ class LoginForm(forms.Form):
 
 class UserCreationForm(forms.ModelForm):
 
+    #is_staff =  forms.BooleanField(label='Business Advisor', required=False)
+    #is_superuser = forms.BooleanField(label='Admin', required=False)
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
     
@@ -26,6 +30,14 @@ class UserCreationForm(forms.ModelForm):
             "is_staff",
             "is_superuser"
         )
+
+        labels = {
+            'is_staff': _('Business Advisor'),
+            'is_superuser': _('Admin'),
+        }
+        help_texts = {
+            'phone': _('Example: 250787734876'),
+        }
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -58,5 +70,12 @@ class UserChangeForm(forms.ModelForm):
             "is_staff",
             "is_superuser"
         )
+        labels = {
+            'is_staff': _('Business Advisor'),
+            'is_superuser': _('Admin'),
+        }
+        help_texts = {
+            'phone': _('Example: 250787734876'),
+        }
 
 

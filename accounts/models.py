@@ -31,17 +31,10 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-
-    ORGANIZATIONS = (
-        ('ORG1','ORG1'),
-        ('ORG2','ORG2'),
-        ('ORG3','ORG3'),
-    )
     first_name = models.CharField(max_length=30, null=True, blank=True)
     last_name = models.CharField(max_length=30, null=True, blank=True)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20, null=True ,blank=True)
-    organization = models.CharField(null=True, blank=True, choices=ORGANIZATIONS, max_length=30)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -51,7 +44,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     username = None
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []    
+    REQUIRED_FIELDS = []
 
     def __str__(self):
         return self.email

@@ -26,7 +26,6 @@ class UserCreationForm(forms.ModelForm):
             "last_name",
             "email",
             "phone",
-            "organization",
             "is_staff",
             "is_superuser"
         )
@@ -66,12 +65,12 @@ class UserChangeForm(forms.ModelForm):
             "last_name",
             "email",
             "phone",
-            "organization",
             "is_staff",
-            "is_superuser"
+            "is_superuser",
+            "is_active"
         )
         labels = {
-            'is_staff': _('Business Advisor'),
+            'is_staff': _('Normal User (BA)'),
             'is_superuser': _('Admin'),
         }
         help_texts = {

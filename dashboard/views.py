@@ -13,6 +13,7 @@ from PIMA_Dashboard.settings import BASE_DIR, env
 from .utils import basemaps
 from .legends import macro_en
 from django.views.decorators.clickjacking import xframe_options_exempt
+from django.contrib.auth.decorators import login_required
 
 START_LOCATION = [-0.9019047458079028, 1.093501788502551]
 
@@ -30,6 +31,7 @@ START_LOCATION = [-0.9019047458079028, 1.093501788502551]
 #   ).add_to(self)
 
 @xframe_options_exempt
+@login_required
 def index(request):
     
     if request.method == 'GET':
@@ -358,7 +360,7 @@ def project_details(request, slug=None):
     context = {'map': map}
     return render(request, 'dashboard/project.html', context)
 
-
+@login_required
 def project_list(request):
 
     projects =  cache.get('Projects')

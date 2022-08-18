@@ -1,14 +1,15 @@
-import csv
-import ee
 import folium
 import datetime
-from folium.plugins import MarkerCluster
 from django.http import Http404
-from django.core.cache import cache
+from .constant_vars import regions
 from django.shortcuts import render
-from dashboard.models import TrainingSession, DemoPlot, TrainingObservation
-from django.template.defaultfilters import slugify
+from django.core.cache import cache
+from folium.plugins import MarkerCluster
 from PIMA_Dashboard.settings import BASE_DIR, env
+from django.template.defaultfilters import slugify
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.clickjacking import xframe_options_exempt
+from dashboard.models import TrainingSession, DemoPlot, TrainingObservation
 from .utils import (
     add_basemap_layers,
     add_training_observations,
@@ -16,43 +17,33 @@ from .utils import (
     add_demo_plot,
     add_required_objects,
 )
-from .constant_vars import regions
-from django.views.decorators.clickjacking import xframe_options_exempt
-from django.contrib.auth.decorators import login_required
 
+
+### INITIAL LOCATION SET-UP ##########
 START_LOCATION = [-0.9019047458079028, 1.093501788502551]
+####################################
 
-# GCP_credentials = ee.ServiceAccountCredentials(env('GOOGLE_SERVICE_ACCOUNT'), env('PRIVATE_KEY'))
-# ee.Initialize(GCP_credentials)
 
-# def add_ee_layer(self, ee_image_object, vis_params, name):
-#   map_id_dict = ee.Image(ee_image_object).getMapId(vis_params)
-#   folium.raster_layers.TileLayer(
-#       tiles=map_id_dict['tile_fetcher'].url_format,
-#       attr='Map Data &copy; <a href="https://earthengine.google.com/">Google Earth Engine</a>',
-#       name=name,
-#       overlay=True,
-#       control=True
-#   ).add_to(self)
+
+
 
 @xframe_options_exempt
 @login_required
 def index(request):
 
-    #DEFINE: MAP and  Basemaps
+    #MAP SETUP
     map = folium.Map(START_LOCATION, tiles=None, zoom_start=3)
-    add_basemap_layers(map)
+    add_basemap_layers(map)      
 
-    #DEFINE: FEATURE-GROUPS
-    featureGroup_training_observation = folium.FeatureGroup(name="Training Observations")
+    #FEATIRE-GROUPS SETUP
+    featureGroup_training_observation = folium.FeatureGroup(name="TrainingObservations")
     featureGroup_training_sessions = folium.FeatureGroup(name="Training Sessions")
     featureGroup_demo_plots = folium.FeatureGroup(name="Demo Plots")
-    
-    #DEFINE: CLUSTERS
+
+    #CLUSTER SETUP
     cluster_training_observations = MarkerCluster()
     cluster_training_sessions = MarkerCluster()
     cluster_demo_plots = MarkerCluster()
-    
 
     if request.method == 'GET':
 
@@ -142,40 +133,75 @@ def index(request):
 @xframe_options_exempt
 def project_details(request, slug=None):
     
-    #DEFINE: MAP and  Basemaps
+    #MAP SETUP
     map = folium.Map(START_LOCATION, tiles=None, zoom_start=3)
-    add_basemap_layers(map)
-    
-    
+    add_basemap_layers(map)      
+
+    #FEATIRE-GROUPS SETUP
+    featureGroup_training_observation = folium.FeatureGroup(name="TrainingObservations")
+    featureGroup_training_sessions = folium.FeatureGroup(name="Training Sessions")
+    featureGroup_demo_plots = folium.FeatureGroup(name="Demo Plots")
+
+    #CLUSTER SETUP
+    cluster_training_observations = MarkerCluster()
+    cluster_training_sessions = MarkerCluster()
+    cluster_demo_plots = MarkerCluster()
+
     if slug is not None:
-        try:
+        
+        if request.method == 'POST':
+            #GETTING DATES
+            end_date_ = request.POST.get('end-date')
+            start_date_ = request.POST.get('start-date')
+
+            if(len(end_date_) == 0): end_date = datetime.date.today()
+            else: end_date = datetime.date.fromisoformat(end_date_)
+
+            if (len(start_date_) == 0): start_date = end_date - datetime.timedelta(days=3650) # 10 years ago
+            else: start_date = datetime.date.fromisoformat(start_date_)
+        
+            Observation_Query =  TrainingObservation.objects.filter(Project_Name_c_slug__iexact=slug).filter(Date_c__range=[start_date, end_date])
+            Training_session_Query = TrainingSession.objects.filter(Project_Name_c_slug__iexact=slug).filter(Date_c__range=[start_date, end_date])
+            demo_plot_Query = DemoPlot.objects.filter(Project_Name_c_slug__iexact=slug).filter(Date_c__range=[start_date, end_date])
+        
+            #TrainingObservations
+            add_training_observations(map, Observation_Query, cluster_training_observations, featureGroup_training_observation)
+
+            #Training Sessions
+            add_training_sessions(map, Training_session_Query, cluster_training_sessions, featureGroup_training_sessions)
+
+            #DemoPlot
+            add_demo_plot(map, demo_plot_Query, cluster_demo_plots, featureGroup_demo_plots)
+
+            add_required_objects(map)  
+
+            context = {'map': map._repr_html_(), 'slug':slug, 'start_date': start_date_, 'end_date': end_date_}
+            return render(request, 'dashboard/project.html', context)
+
+        
+        if request.method == 'GET':
+
             Observation_Query =  TrainingObservation.objects.filter(Project_Name_c_slug__iexact=slug)
             Training_session_Query = TrainingSession.objects.filter(Project_Name_c_slug__iexact=slug)
             demo_plot_Query = DemoPlot.objects.filter(Project_Name_c_slug__iexact=slug)
-        except:
-            raise Http404
+            
+            #TrainingObservations
+            add_training_observations(map, Observation_Query, cluster_training_observations, featureGroup_training_observation)
 
-        featureGroup_training_observation = folium.FeatureGroup(name="TrainingObservations")
-        featureGroup_training_sessions = folium.FeatureGroup(name="Training Sessions")
-        featureGroup_demo_plots = folium.FeatureGroup(name="Demo Plots")
+            #Training Sessions
+            add_training_sessions(map, Training_session_Query, cluster_training_sessions, featureGroup_training_sessions)
 
-        cluster_training_observations = MarkerCluster()
-        cluster_training_sessions = MarkerCluster()
-        cluster_demo_plots = MarkerCluster()
+            #DemoPlot
+            add_demo_plot(map, demo_plot_Query, cluster_demo_plots, featureGroup_demo_plots)
 
-        #TrainingObservations
-        add_training_observations(map, Observation_Query, cluster_training_observations, featureGroup_training_observation)
+            add_required_objects(map)  
 
-        #Training Sessions
-        add_training_sessions(map, Training_session_Query, cluster_training_sessions, featureGroup_training_sessions)
+            context = {'map': map._repr_html_(), 'slug':slug}
+            return render(request, 'dashboard/project.html', context)
 
-        #DemoPlot
-        add_demo_plot(map, demo_plot_Query, cluster_demo_plots, featureGroup_demo_plots)
+    else:
+        raise Http404
 
-    add_required_objects(map)  
-
-    context = {'map': map._repr_html_()}
-    return render(request, 'dashboard/project.html', context)
 
 @login_required
 def project_list(request):

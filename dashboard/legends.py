@@ -42,7 +42,7 @@ template_en = """
     <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-info-sign&size=35&background=E7625F">&nbsp;&nbsp; Training Observation</li>
     <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-info-sign&size=35&background=32CD30">&nbsp;&nbsp; Demo Plots</li>
     <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-info-sign&size=35&background=0E86D4">&nbsp;&nbsp; Training Session</li>
-    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-info-sign&size=35&background=FFBF00">&nbsp;&nbsp; Farm Visit</li>
+    <li><img src="https://cdn.mapmarker.io/api/v1/font-awesome/v5/pin?icon=fa-info-sign&size=35&background=000000">&nbsp;&nbsp; Farm Visit</li>
   </ul>
 </div>
 </div>
@@ -90,7 +90,5 @@ template_en = """
 </style>
 {% endmacro %}"""
 
-
-
-macro_en = MacroElement()
-macro_en._template = Template(template_en)
+macro_legend = MacroElement()
+macro_legend._template = Template(template_en)

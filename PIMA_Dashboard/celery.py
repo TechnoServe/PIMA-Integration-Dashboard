@@ -12,21 +12,30 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 
 #Celery beat Settings
 app.conf.beat_schedule = {
-    'fetch-salesforce-trainingObservations-every-60mins': {
-        'task' : 'dashboard.tasks.getTrainingObservations',
-        'schedule' : crontab(minute='*/10'),
-    },
-    'fetch-programsAndprojects-from-salesforce': {
+    
+    'fetch-programsAndprojects-every-30mins': {
         'task' : 'dashboard.tasks.getProgramsAndProjects',
-        'schedule' : crontab(minute='*/10'),
+        'schedule' : crontab(minute='*/30'),
     },
-    'fetch-salesforce-trainingSessions-every-60mins': {
+
+    'fetch-trainingObservations-every-30mins': {
+        'task' : 'dashboard.tasks.getTrainingObservations',
+        'schedule' : crontab(minute='*/30'),
+    },
+
+    'fetch-trainingSessions-every-30mins': {
         'task' : 'dashboard.tasks.getTrainingSessions',
-        'schedule' : crontab(minute='*/10'),
+        'schedule' : crontab(minute='*/30'),
     },
-    'fetch-demoPlots-every-60mins': {
-        'task' : 'dashboard.tasks.getDemoPlot',
-        'schedule' : crontab(minute='*/10'),
+
+    'fetch-demoPlots-every-30mins': {
+        'task' : 'dashboard.tasks.getDemoPlots',
+        'schedule' : crontab(minute='*/30'),
+    },
+    
+    'fetch-farmVisits-every-30mins': {
+        'task' : 'dashboard.tasks.getFarmVisits',
+        'schedule' : crontab(minute='*/30'),
     }
 }
 

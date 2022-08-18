@@ -90,7 +90,5 @@ template_en = """
 </style>
 {% endmacro %}"""
 
-
-
-macro_en = MacroElement()
-macro_en._template = Template(template_en)
+macro_legend = MacroElement()
+macro_legend._template = Template(template_en)

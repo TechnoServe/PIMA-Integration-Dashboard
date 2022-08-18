@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 import environ
 from pathlib import Path
+from django.contrib.messages import constants as messages
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -47,8 +48,10 @@ INSTALLED_APPS = [
 
     #Added APPs
     'dashboard',
+    'accounts',
     'django_celery_results',
     'django_celery_beat',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -177,3 +180,21 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = env('CELERY_TIMEZONE')
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+
+#Authentication User Model
+AUTH_USER_MODEL = 'accounts.User'
+
+#REDIRECTION
+#LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
+#LOGIN_URL = 'login'
+
+
+MESSAGE_TAGS = {
+        messages.DEBUG: 'alert-secondary',
+        messages.INFO: 'alert-info',
+        messages.SUCCESS: 'alert-success',
+        messages.WARNING: 'alert-warning',
+        messages.ERROR: 'alert-danger',
+ }

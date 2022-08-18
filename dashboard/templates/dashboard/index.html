@@ -2,9 +2,11 @@
 {% load static %}
 
 {% block content %}
-
-
 <div class="container-fluid">
+
+    
+
+
     <div class="container" style="padding:32px 0">
         <div class="card"  style="height: 100%">
             <div class="row">
@@ -13,10 +15,24 @@
                         <div class="col-3">
                             <img src="{% static 'images/TNS-Labs-Logo-v2.png' %}" alt="TNS-Logo" />
                         </div>
-                        <div class="col-9" style="text-align: left;">
+                        <div class="col-7" style="text-align: left;">
                             <p style="color:#000000; font-weight:900; font-size:24px; margin-bottom: 0px;">PIMA Dashboard</p>
                             <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 8px;">Interactive dashboard that uses Salesforce data to map Technoserve extension service data such as farm visits, training sessions, training observations, and beneficiaries' farms, to allow real-time monitoring across regions</p>
                             <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 0rem;"><b>Note:</b> <i>Synced every one hour</i></p>
+                        </div>
+                        <div class="col-2" style="text-align: right;">
+                            <!-- <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  Dropdown button
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                  <a class="dropdown-item" href="#">Action</a>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                                </div>
+                              </div> -->
+
+                            <span>Hi {{user.last_name | default:"User"}}! &nbsp;&nbsp; <a href="{% url 'logout' %}">Log out</a></span>
                         </div>
                     </div>
                 </div>
@@ -89,7 +105,7 @@
                             <div class="row" style="padding:36px 24px 16px 0px">
                                 <div class="col-6">
                                     <!-- <button  onclick="ClearForm()" class="btn btn-light" style="font-size: 12px; padding: 8px 32px; color: #333;"> CLEAR </button> -->
-                                    <a class="text-decoration-none"  href="/" style="font-size: 12px; padding: 8px 32px; color: #333;"> CLEAR </a>
+                                    <a class="text-decoration-none"  href="{% url 'home' %}" style="font-size: 12px; padding: 8px 32px; color: #333;"> CLEAR </a>
                                 </div>
                                 <div class="col-6">
                                     <button class="btn btn-outline-primary" style="font-size: 12px; padding: 8px 32px"> VIEW </button>
@@ -97,13 +113,24 @@
                             </div>
                         </form>
                     </div>
+                    <div class="row" style="margin-top: 16px;">
+                        {% if request.user.is_superuser %}
+                            <div class="col-2">
+                            </div>
+                            <div class="col-8">
+                                <a class="btn btn-outline-secondary" href="{% url 'manage_users' %}" style="font-size: 16px;">Manager Users</a>
+                            </div>
+                            <div class="col-2">
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
         
         <!-- projectlist-->
         <div class="row">
-            <p style="color:#333; font-weight:400; font-size:13px">For each Coffee Project, see the <a href="/dashboard/projectlist" target="_blank"> Projects list</a><br>
+            <p style="color:#333; font-weight:400; font-size:13px">For each Coffee Project, see the <a href="{% url 'project_list' %}" target="_blank"> Projects list</a><br>
                 By default, the map shows data for the last 90 days. If you want more or less, use the DATE RANGE filter on the left side.
             </p>
             <!-- <p style="color:#3a3a3a; font-weight:400; font-size:12px;">By default, the map shows data for the last 90 days. If you want more or less, use the DATE RANGE filter on the left side.</p> -->

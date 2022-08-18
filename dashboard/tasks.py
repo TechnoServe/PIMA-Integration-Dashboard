@@ -4,7 +4,7 @@ from celery import shared_task
 from django.core.cache import cache
 from PIMA_Dashboard.settings import env
 from simple_salesforce import Salesforce
-from dashboard.models import DemoPlot, TrainingObservation, TrainingSession
+from dashboard.models import DemoPlot, TrainingObservation, TrainingSession, FarmVisit
 
 SALESFORCE_INSTANCE = env('SALESFORCE_INSTANCE')
 
@@ -67,7 +67,7 @@ def getTrainingObservations(self):
     TOKEN = getToken()
 
     sf = Salesforce(instance_url=f'https://{SALESFORCE_INSTANCE}', session_id=TOKEN)    
-    Obs = sf.query("SELECT Id,Date__c,Project_Name__c,Observation_Location__Latitude__s,Observation_Location__Longitude__s,Trainer__c,Number_of_Participants__c FROM Observation__c WHERE IsDeleted=false AND RecordType.Name = 'Training'")
+    Obs = sf.query("SELECT Id,Date__c,Project_Name__c,Observation_Location__Latitude__s,Observation_Location__Longitude__s,Trainer__r.Name,Number_of_Participants__c FROM Observation__c WHERE IsDeleted=false AND RecordType.Name = 'Training' AND Observation_Location__Latitude__s != null AND Observation_Location__Longitude__s != null")
     
     records.extend(Obs.get('records'))
 
@@ -102,7 +102,7 @@ def getTrainingObservations(self):
             Program_c = Projects.get(record.get('Project_Name__c')),
             Observation_Location_Latitude_s = record.get('Observation_Location__Latitude__s'),
             Observation_Location_Longitude_s = record.get('Observation_Location__Longitude__s'),
-            Trainer_c = record.get('Trainer__c'),
+            Trainer_c = record.get('Trainer__r').get('Name') if record.get('Trainer__r') is not None else 'null',
             Number_of_Participants_c = record.get('Number_of_Participants__c')
         )
 
@@ -116,7 +116,7 @@ def getTrainingSessions(self):
     TOKEN = getToken()
 
     sf = Salesforce(instance_url=f'https://{SALESFORCE_INSTANCE}', session_id=TOKEN)    
-    TSs = sf.query("SELECT Id,Date__c,Project_Name__c,Location_GPS__Latitude__s,Location_GPS__Longitude__s, Number_in_Attendance__c,Module_Name__c,Trainer__c,Training_Group__c,Program__c FROM Training_Session__c WHERE IsDeleted=false")
+    TSs = sf.query("SELECT Id,Date__c,Project_Name__c,Location_GPS__Latitude__s,Location_GPS__Longitude__s, Number_in_Attendance__c,Module_Name__c,Trainer__r.Name,Training_Group__r.Name,Program__c FROM Training_Session__c WHERE IsDeleted=false AND Location_GPS__Latitude__s != null AND Location_GPS__Longitude__s != null")
     
     records.extend(TSs.get('records'))
 
@@ -147,9 +147,9 @@ def getTrainingSessions(self):
             Location_GPS_Latitude_s = record.get('Location_GPS__Latitude__s'),
             Location_GPS_Longitude_s = record.get('Location_GPS__Longitude__s'),
             Project_Name_c = record.get('Project_Name__c'),
-            Trainer_c = record.get('Trainer__c'),
+            Trainer_c = record.get('Trainer__r').get('Name') if record.get('Trainer__r') is not None else 'null',
             Program_c = record.get('Program__c'),
-            Training_Group_c = record.get('Training_Group__c'),
+            Training_Group_c = record.get('Training_Group__r').get('Name') if record.get('Training_Group__r') is not None else 'null',
             Module_Name_c = record.get('Module_Name__c'),
             Number_in_Attendance_c = record.get('Number_in_Attendance__c')
         )
@@ -159,13 +159,13 @@ def getTrainingSessions(self):
 
 
 @shared_task(bind=True)
-def getDemoPlot(self):
+def getDemoPlots(self):
     
     records = list()
     TOKEN = getToken()
 
     sf = Salesforce(instance_url=f'https://{SALESFORCE_INSTANCE}', session_id=TOKEN)    
-    Demoplots = sf.query("SELECT Id,Date__c,Project_Name__c,Observation_Location__Latitude__s,Observation_Location__Longitude__s,Trainer__c,Number_of_Participants__c FROM Observation__c WHERE IsDeleted=false AND RecordType.Name = 'Demo Plot'")
+    Demoplots = sf.query("SELECT Id,Date__c,Project_Name__c,Observation_Location__Latitude__s,Observation_Location__Longitude__s,Trainer__r.Name,Number_of_Participants__c FROM Observation__c WHERE IsDeleted=false AND RecordType.Name = 'Demo Plot' AND Observation_Location__Latitude__s != null AND Observation_Location__Longitude__s != null")
     
     records.extend(Demoplots.get('records'))
 
@@ -179,7 +179,7 @@ def getDemoPlot(self):
     #Cache to REDIS
     cache.set('DemoPlots', records)
     
-    # Get the orject to help find the program
+    # Get the projects to help find the program
     Projects =  cache.get('Projects')
 
     #Add to SQLite
@@ -200,9 +200,61 @@ def getDemoPlot(self):
             Program_c = Projects.get(record.get('Project_Name__c')),
             Observation_Location_Latitude_s = record.get('Observation_Location__Latitude__s'),
             Observation_Location_Longitude_s = record.get('Observation_Location__Longitude__s'),
-            Trainer_c = record.get('Trainer__c'),
+            Trainer_c = record.get('Trainer__r').get('Name') if record.get('Trainer__r') is not None else 'null',
             Number_of_Participants_c = record.get('Number_of_Participants__c')
         )
 
     return "DONE"
+
+@shared_task(bind=True)
+def getFarmVisits(self):
+    #QUERY
+    #SELECT Id,OwnerId,Date_Visited__c,Location_GPS__Latitude__s,Location_GPS__Longitude__s,Farmer_Trainer__r.Name,Training_Group__r.Name FROM Farm_Visit__c WHERE IsDeleted=false AND Location_GPS__Latitude__s != null AND Location_GPS__Longitude__s != null
+
+    records = list()
+    TOKEN = getToken()
+
+    sf = Salesforce(instance_url=f'https://{SALESFORCE_INSTANCE}', session_id=TOKEN)    
+    FarmVisits = sf.query("SELECT Id,Date_Visited__c,Location_GPS__Latitude__s,Location_GPS__Longitude__s,Farmer_Trainer__r.Name,Training_Group__r.Name FROM Farm_Visit__c WHERE IsDeleted=false AND Location_GPS__Latitude__s != null AND Location_GPS__Longitude__s != null")
+    
+    records.extend(FarmVisits.get('records'))
+
+    if FarmVisits.get('done')is False:
+        DONE = False
+        while not DONE:
+            FarmVisits = sf.query_more(FarmVisits.get('nextRecordsUrl'), True)
+            records.extend(FarmVisits.get('records'))
+            DONE = FarmVisits.get('done')
+
+    #Cache to REDIS
+    cache.set('FarmVisits', records)
+    
+    # Get the projects to help find the program
+    #Projects =  cache.get('Projects')
+
+    #Add to SQLite
+    FarmVisit.objects.all().delete() #Delete all records before adding new
+
+    for record in records:
+        if(record.get('Location_GPS__Latitude__s') == None or record.get('Location_GPS__Longitude__s') == None): continue
+        
+        try:
+            date_ = datetime.date.fromisoformat(record.get('Date_Visited__c'))
+        except:
+            date_ = None
+
+        FarmVisit.objects.create(
+            Salesforce_Id=record.get('Id'),
+            Date_Visited_c = date_,
+            #Project_Name_c =  record.get('Project_Name__c'),
+            #Program_c = Projects.get(record.get('Project_Name__c')),
+            Location_GPS_Latitude_s = record.get('Location_GPS__Latitude__s'),
+            Location_GPS_Longitude_s = record.get('Location_GPS__Longitude__s'),
+            Farmer_Trainer_c = record.get('Farmer_Trainer__r').get('Name') if record.get('Farmer_Trainer__r') is not None else 'null',
+            Training_Group_c = record.get('Training_Group__r').get('Name') if record.get('Training_Group__r') is not None else 'null'
+        )
+
+    return "DONE"
+
+
 ##################################################################

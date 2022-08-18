@@ -64,7 +64,7 @@ def add_training_sessions(map, training_sessions ,cluster, feature_group):
     cluster.add_to(feature_group)
     feature_group.add_to(map)
 
-def add_demo_plot(map, demo_plots, cluster, feature_group):
+def add_demo_plots(map, demo_plots, cluster, feature_group):
     '''
     ADD Demo Plots on the map
     '''
@@ -82,6 +82,28 @@ def add_demo_plot(map, demo_plots, cluster, feature_group):
                     tooltip="Demo Plot",
                     popup = pop_info,
                     icon=folium.Icon(color="green"),
+                    ).add_to(cluster)
+    cluster.add_to(feature_group)
+    feature_group.add_to(map)
+
+
+def add_farm_visits(map, farm_visits, cluster, feature_group):
+    '''
+    ADD Farm Visits to the map
+    '''
+    for farm_visit in farm_visits:
+            cord = [farm_visit.Location_GPS_Latitude_s, farm_visit.Location_GPS_Longitude_s]
+            if(cord[0] is None or cord[1] is None): continue
+            
+            date_ = farm_visit.Date_Visited_c
+            trainer_ = farm_visit.Farmer_Trainer_c
+            group_ = farm_visit.Training_Group_c
+            pop_info = f'<i>Date</i>:<b>{date_}</b><br><i>Trainer</i>:<b>{trainer_}</b><br><i>Group</i>:<b>{group_}</b>'
+            folium.Marker(
+                    location=cord,
+                    tooltip="Farm Visit",
+                    popup = pop_info,
+                    icon=folium.Icon(color="black"),
                     ).add_to(cluster)
     cluster.add_to(feature_group)
     feature_group.add_to(map)

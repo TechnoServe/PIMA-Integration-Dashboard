@@ -9,13 +9,14 @@ from PIMA_Dashboard.settings import BASE_DIR, env
 from django.template.defaultfilters import slugify
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.clickjacking import xframe_options_exempt
-from dashboard.models import TrainingSession, DemoPlot, TrainingObservation
+from dashboard.models import TrainingSession, DemoPlot, TrainingObservation, FarmVisit
 from .utils import (
     add_basemap_layers,
     add_training_observations,
     add_training_sessions,
-    add_demo_plot,
+    add_demo_plots,
     add_required_objects,
+    add_farm_visits
 )
 
 
@@ -39,11 +40,13 @@ def index(request):
     featureGroup_training_observation = folium.FeatureGroup(name="TrainingObservations")
     featureGroup_training_sessions = folium.FeatureGroup(name="Training Sessions")
     featureGroup_demo_plots = folium.FeatureGroup(name="Demo Plots")
+    featureGroup_farm_visits = folium.FeatureGroup(name="Farm Visits")
 
     #CLUSTER SETUP
     cluster_training_observations = MarkerCluster()
     cluster_training_sessions = MarkerCluster()
     cluster_demo_plots = MarkerCluster()
+    cluster_farm_visits = MarkerCluster()
 
     if request.method == 'GET':
 
@@ -54,6 +57,7 @@ def index(request):
         TrainingObservations = TrainingObservation.objects.filter(Date_c__range=[start_date, end_date])
         TrainingSessions = TrainingSession.objects.filter(Date_c__range=[start_date, end_date])
         Demoplots = DemoPlot.objects.filter(Date_c__range=[start_date, end_date])
+        FarmVisits = FarmVisit.objects.filter(Date_Visited_c__range=[start_date, end_date])
 
 
         #ADD TrainingObservations on MAP
@@ -63,7 +67,10 @@ def index(request):
         add_training_sessions(map, TrainingSessions, cluster_training_sessions, featureGroup_training_sessions)
 
         #ADD DemoPlot on MAP
-        add_demo_plot(map, Demoplots, cluster_demo_plots, featureGroup_demo_plots)
+        add_demo_plots(map, Demoplots, cluster_demo_plots, featureGroup_demo_plots)
+
+        #ADD FarmVisit to MAP
+        add_farm_visits(map, FarmVisits, cluster_farm_visits, featureGroup_farm_visits)
         
 
         #ADD: legend && Layer controller
@@ -98,11 +105,13 @@ def index(request):
             TrainingObservations = TrainingObservation.objects.filter(Date_c__range=[start_date, end_date])
             TrainingSessions = TrainingSession.objects.filter(Date_c__range=[start_date, end_date])
             Demoplots = DemoPlot.objects.filter(Date_c__range=[start_date, end_date])
+            FarmVisits = FarmVisit.objects.filter(Date_Visited_c__range=[start_date, end_date])
 
         else:
             TrainingObservations = TrainingObservation.objects.filter(Date_c__range=[start_date, end_date]).filter(Program_c__in=selected_programs)
             TrainingSessions = TrainingSession.objects.filter(Date_c__range=[start_date, end_date]).filter(Program_c__in=selected_programs)
             Demoplots = DemoPlot.objects.filter(Date_c__range=[start_date, end_date]).filter(Program_c__in=selected_programs)
+            FarmVisits = FarmVisit.objects.filter(Date_Visited_c__range=[start_date, end_date]).filter(Program_c__in=selected_programs)
 
 
         #TrainingObservations
@@ -111,9 +120,11 @@ def index(request):
         #Training Sessions
         add_training_sessions(map, TrainingSessions, cluster_training_sessions, featureGroup_training_sessions)
 
-
         #DemoPlot
-        add_demo_plot(map, Demoplots, cluster_demo_plots, featureGroup_demo_plots)
+        add_demo_plots(map, Demoplots, cluster_demo_plots, featureGroup_demo_plots)
+
+        #ADD FarmVisit to MAP
+        add_farm_visits(map, FarmVisits, cluster_farm_visits, featureGroup_farm_visits)
 
         add_required_objects(map)  
 
@@ -141,11 +152,13 @@ def project_details(request, slug=None):
     featureGroup_training_observation = folium.FeatureGroup(name="TrainingObservations")
     featureGroup_training_sessions = folium.FeatureGroup(name="Training Sessions")
     featureGroup_demo_plots = folium.FeatureGroup(name="Demo Plots")
+    #featureGroup_farm_visits = folium.FeatureGroup(name="Farm Visits")
 
     #CLUSTER SETUP
     cluster_training_observations = MarkerCluster()
     cluster_training_sessions = MarkerCluster()
     cluster_demo_plots = MarkerCluster()
+    #cluster_farm_visits = MarkerCluster()
 
     if slug is not None:
         
@@ -160,18 +173,19 @@ def project_details(request, slug=None):
             if (len(start_date_) == 0): start_date = end_date - datetime.timedelta(days=3650) # 10 years ago
             else: start_date = datetime.date.fromisoformat(start_date_)
         
-            Observation_Query =  TrainingObservation.objects.filter(Project_Name_c_slug__iexact=slug).filter(Date_c__range=[start_date, end_date])
-            Training_session_Query = TrainingSession.objects.filter(Project_Name_c_slug__iexact=slug).filter(Date_c__range=[start_date, end_date])
-            demo_plot_Query = DemoPlot.objects.filter(Project_Name_c_slug__iexact=slug).filter(Date_c__range=[start_date, end_date])
-        
+            query_training_observations =  TrainingObservation.objects.filter(Project_Name_c_slug__iexact=slug).filter(Date_c__range=[start_date, end_date])
+            query_training_sessions = TrainingSession.objects.filter(Project_Name_c_slug__iexact=slug).filter(Date_c__range=[start_date, end_date])
+            query_demo_plots = DemoPlot.objects.filter(Project_Name_c_slug__iexact=slug).filter(Date_c__range=[start_date, end_date])
+            
+
             #TrainingObservations
-            add_training_observations(map, Observation_Query, cluster_training_observations, featureGroup_training_observation)
+            add_training_observations(map, query_training_observations, cluster_training_observations, featureGroup_training_observation)
 
             #Training Sessions
-            add_training_sessions(map, Training_session_Query, cluster_training_sessions, featureGroup_training_sessions)
+            add_training_sessions(map, query_training_sessions, cluster_training_sessions, featureGroup_training_sessions)
 
             #DemoPlot
-            add_demo_plot(map, demo_plot_Query, cluster_demo_plots, featureGroup_demo_plots)
+            add_demo_plots(map, query_demo_plots, cluster_demo_plots, featureGroup_demo_plots)
 
             add_required_objects(map)  
 
@@ -181,18 +195,18 @@ def project_details(request, slug=None):
         
         if request.method == 'GET':
 
-            Observation_Query =  TrainingObservation.objects.filter(Project_Name_c_slug__iexact=slug)
-            Training_session_Query = TrainingSession.objects.filter(Project_Name_c_slug__iexact=slug)
-            demo_plot_Query = DemoPlot.objects.filter(Project_Name_c_slug__iexact=slug)
+            query_training_observations =  TrainingObservation.objects.filter(Project_Name_c_slug__iexact=slug)
+            query_training_sessions = TrainingSession.objects.filter(Project_Name_c_slug__iexact=slug)
+            query_demo_plots = DemoPlot.objects.filter(Project_Name_c_slug__iexact=slug)
             
             #TrainingObservations
-            add_training_observations(map, Observation_Query, cluster_training_observations, featureGroup_training_observation)
+            add_training_observations(map, query_training_observations, cluster_training_observations, featureGroup_training_observation)
 
             #Training Sessions
-            add_training_sessions(map, Training_session_Query, cluster_training_sessions, featureGroup_training_sessions)
+            add_training_sessions(map, query_training_sessions, cluster_training_sessions, featureGroup_training_sessions)
 
             #DemoPlot
-            add_demo_plot(map, demo_plot_Query, cluster_demo_plots, featureGroup_demo_plots)
+            add_demo_plots(map, query_demo_plots, cluster_demo_plots, featureGroup_demo_plots)
 
             add_required_objects(map)  
 

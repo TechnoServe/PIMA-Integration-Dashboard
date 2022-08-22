@@ -37,7 +37,7 @@ def index(request):
     add_basemap_layers(map)      
 
     #FEATIRE-GROUPS SETUP
-    featureGroup_training_observation = folium.FeatureGroup(name="TrainingObservations")
+    featureGroup_training_observation = folium.FeatureGroup(name="Training Observations")
     featureGroup_training_sessions = folium.FeatureGroup(name="Training Sessions")
     featureGroup_demo_plots = folium.FeatureGroup(name="Demo Plots")
     featureGroup_farm_visits = folium.FeatureGroup(name="Farm Visits")
@@ -59,6 +59,7 @@ def index(request):
         Demoplots = DemoPlot.objects.filter(Date_c__range=[start_date, end_date])
         FarmVisits = FarmVisit.objects.filter(Date_Visited_c__range=[start_date, end_date])
 
+        selected_programs = list(cache.get('Programs').values())
 
         #ADD TrainingObservations on MAP
         add_training_observations(map, TrainingObservations, cluster_training_observations, featureGroup_training_observation)
@@ -81,7 +82,10 @@ def index(request):
         context = {
             'map': map._repr_html_(),
             'programs': programs,
-            'regions': regions
+            'regions': regions,
+            'selected_programs':selected_programs,
+            'start_date': start_date.strftime("%Y/%m/%d").replace('/', '-'),
+            'end_date': end_date.strftime("%Y/%m/%d").replace('/', '-')
         }
         return render(request, 'dashboard/index.html', context)
 
@@ -91,6 +95,7 @@ def index(request):
         #GETTING DATES
         end_date_ = request.POST.get('end-date')
         start_date_ = request.POST.get('start-date')
+        
 
         if(len(end_date_) == 0): end_date = datetime.date.today()
         else: end_date = datetime.date.fromisoformat(end_date_)

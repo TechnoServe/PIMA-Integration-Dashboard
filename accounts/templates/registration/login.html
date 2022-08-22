@@ -1,49 +1,146 @@
-<!--templates/registration/login.html-->
-{% extends "registration/base.html" %}
 {% load static %}
-{% load crispy_forms_tags %}
+{% load i18n %}
 
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="container-fluid">
-  <div class="container" style="padding:32px 0">
-      <!-- <div class="card"> -->
-          <div class="row">
-              <div class="col-12">
-                  <div class="row" style="padding:32px 32px 18px 32px">
-                      <div class="col-3">
-                          <img src="{% static 'images/TNS-Labs-Logo-v2.png' %}" alt="TNS-Logo" />
-                      </div>
-                      <div class="col-9" style="text-align: left;">
-                          <p style="color:#000000; font-weight:900; font-size:24px; margin-bottom: 0px;">PIMA - Log to account</p>
-                          <!-- <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 8px;">Interactive dashboard that uses Salesforce data to map Technoserve extension service data such as farm visits, training sessions, training observations, and beneficiaries' farms, to allow real-time monitoring across regions</p>
-                          <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 0rem;"><b>Note:</b> <i>Synced every one hour</i></p> -->
-                      </div>
-                  </div>
-              </div>
-              
-          </div>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="canonical" href="https://www.technoserve.org/">
 
-          <div class="row justify-content-center" >
-            <div  class="col-4">
-            <div class="card" style="margin-top: 32px;">
-              <div class="card-body">
-                <!-- <h4 class="card-title">Log in to your account</h4> -->
-                <form method="post">
-                  {% csrf_token %}
-                  {{ form|crispy }}
-                  <button type="submit" style="margin-top: 8px;" class="btn btn-primary">Log in</button>
-                </form>
-              </div>
-              <div class="card-footer">
-                Forgot your password? <a href="#">click here</a><br>
-              </div>
+  <title>Login</title>
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="https://www.technoserve.org/wp-content/themes/technoserve/assets/img/logomark-full.svg"
+  />
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+  <!-- Icons -->
+  <link rel="stylesheet" href="{% static 'assets/vendor/nucleo/css/nucleo.css' %}" type="text/css">
+  <link rel="stylesheet" href="{% static 'assets/vendor/@fortawesome/fontawesome-free/css/all.min.css' %}" type="text/css">
+  <!-- Argon CSS -->
+  <link rel="stylesheet" href="{% static 'assets/css/argon.css' %}" type="text/css">
+
+  <script src="https://kit.fontawesome.com/2f0439ef64.js" crossorigin="anonymous"></script>
+  <style>
+      a:hover {
+          text-decoration: none;
+          color: rgba(0, 0, 0, .7);
+      }
+      input{
+        width: 100%;
+        height: 42px;
+        border-radius: 4px;
+        border: 1px solid #e0e0e0;
+      }
+
+  </style>
+
+
+</head>
+<body class="bg-success">
+
+  <div class="main-content">
+
+
+
+    <!-- Header -->
+    <div class="header bg-gradient-primary py-7 py-lg-8">
+      <div class="container">
+        <!-- <div class="header-body text-center mb-7"> -->
+          <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-6">
+            
             </div>
           </div>
+        </div>
+      </div>
+      <div class="separator separator-bottom separator-skew zindex-100">
+        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
+        </svg>
+      </div>
+    </div>
+
+    {% csrf_token %}
+
+    <!-- Page content -->
+    <div class="container mt--8 pb-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-7">
+          <div class="card bg-secondary shadow border-0">
+            <div class="card-header bg-transparent pb-5">
+              <div class="text-muted text-center mt-2 mb-3">
+                PIMA Dashboard - Login
+              </div>
+            </div>
+            <div class="card-body px-lg-5 py-lg-5">
+              <div class="text-center text-muted mb-4">
+
+                {% if msg %}
+                  <p>{{ msg }}</p>
+                {% else %}
+                  <p>
+                    {% trans "Log to your account" %}
+                  </p>
+                {% endif %}
+
+              </div>
+
+              <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="form-group mb-3">
+                  <p class="mb-1">Email</p>
+                  <div class="input-group">
+                    
+                      
+                    
+                    {{ form.username }}
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <p class="mb-1">Password</p>
+                  <div class="input-group">
+                    
+      
+                    
+                    {{ form.password }}
+                  </div>
+                </div>
+
+                
+                <div class="text-center">
+                  <button type="submit" class="btn btn-secondary my-4">{% trans "Sign in" %}</button>
+                </div>
+{#                <div class="text-center">#}
+{#                  <a href="#" class="text-muted"><small><u>{% trans "Forgot password" %}</u></small></a>#}
+{#                </div>#}
+              </form>
+            </div>
           </div>
-      <!-- </div> -->
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 
+  <script src="{% static 'assets/vendor/jquery/dist/jquery.min.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+  <script src="{% static 'assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/js-cookie/js.cookie.js' %}"></script>
+  <script src="{% static 'assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js' %}"></script>
+  <script src="{% static 'assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
 
-{% endblock %}
+  <script src="{% static 'assets/js/argon.js' %}"></script>
+
+</body>
+
+</html>
+

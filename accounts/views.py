@@ -66,6 +66,28 @@ def manage_users(request):
 
 
 @user_passes_test(lambda user: user.is_superuser)
+def edit_user(request, id):
+    user_object = get_user_model()
+    user_ = user_object.objects.get(id=id)
+
+    if request.method == 'POST':
+        form =  UserChangeForm(request.POST, instance=user_)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "User edited Successfully")
+            return redirect('manage_users')
+        
+    else:
+        form =  UserChangeForm(instance=user_)
+        context = {'form': form }
+        return render(request, 'registration/edit_user.html', context)
+
+
+
+
+
+@user_passes_test(lambda user: user.is_superuser)
 def delete_user(request, id):
 
     user_object = get_user_model()

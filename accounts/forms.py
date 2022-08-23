@@ -31,7 +31,7 @@ class UserCreationForm(forms.ModelForm):
         )
 
         labels = {
-            'is_staff': _('Business Advisor'),
+            'is_staff': _('Normal user'),
             'is_superuser': _('Admin'),
         }
         help_texts = {

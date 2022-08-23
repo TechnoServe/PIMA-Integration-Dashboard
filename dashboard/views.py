@@ -31,6 +31,10 @@ START_LOCATION = [-0.9019047458079028, 1.093501788502551]
 @xframe_options_exempt
 @login_required
 def index(request):
+    '''
+    GET     request: Homepage view Query data from local database and add them on the map
+    POST    request: Homepaage view Filter data from local database and add them to the map
+    '''
 
     #MAP SETUP
     map = folium.Map(START_LOCATION, tiles=None, zoom_start=3)
@@ -148,6 +152,9 @@ def index(request):
 
 @xframe_options_exempt
 def project_details(request, slug=None):
+    '''
+    View that shows data only related to one project on the map
+    '''
     
     #MAP SETUP
     map = folium.Map(START_LOCATION, tiles=None, zoom_start=3)
@@ -192,13 +199,18 @@ def project_details(request, slug=None):
             #DemoPlot
             add_demo_plots(map, query_demo_plots, cluster_demo_plots, featureGroup_demo_plots)
 
-            add_required_objects(map)  
+            add_required_objects(map)
+
+
 
             context = {'map': map._repr_html_(), 'slug':slug, 'start_date': start_date_, 'end_date': end_date_}
             return render(request, 'dashboard/project.html', context)
 
         
         if request.method == 'GET':
+
+            end_date = datetime.date.today()
+            start_date = end_date - datetime.timedelta(days=1825) #5 years ago.
 
             query_training_observations =  TrainingObservation.objects.filter(Project_Name_c_slug__iexact=slug)
             query_training_sessions = TrainingSession.objects.filter(Project_Name_c_slug__iexact=slug)
@@ -215,7 +227,12 @@ def project_details(request, slug=None):
 
             add_required_objects(map)  
 
-            context = {'map': map._repr_html_(), 'slug':slug}
+            context = {
+                'map': map._repr_html_(),
+                'slug':slug,
+                'start_date': start_date.strftime("%Y/%m/%d").replace('/', '-'),
+                'end_date': end_date.strftime("%Y/%m/%d").replace('/', '-'),
+            }
             return render(request, 'dashboard/project.html', context)
 
     else:
@@ -224,8 +241,13 @@ def project_details(request, slug=None):
 
 @login_required
 def project_list(request):
+    '''
+    List all projects related to coffee programs.
+    '''
 
     projects =  cache.get('Projects')
+    if projects is None: return render(request, 'dashboard/project_list.html', {})
+
     projects_ = dict()
 
     for proj in projects: projects_[proj] = slugify(proj)

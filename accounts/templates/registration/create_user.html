@@ -1,221 +1,70 @@
+{% extends "registration/base.html" %}
 {% load static %}
-{% load i18n %}
+{% load crispy_forms_tags %}
+{% block content %}
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="canonical" href="https://www.technoserve.org/">
-
-  <title>
-    {% trans  "TechnoServe" %}
-  </title>
-
-  <link
-    rel="icon"
-    type="image/png"
-    href="https://www.technoserve.org/wp-content/themes/technoserve/assets/img/logomark-full.svg"
-  />
-  <!-- Fonts -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
-  <!-- Icons -->
-  <link rel="stylesheet" href="{% static 'assets/vendor/nucleo/css/nucleo.css' %}" type="text/css">
-  <link rel="stylesheet" href="{% static 'assets/vendor/@fortawesome/fontawesome-free/css/all.min.css' %}" type="text/css">
-  <!-- Argon CSS -->
-  <link rel="stylesheet" href="{% static 'assets/css/argon.css' %}" type="text/css">
-
-  <script src="https://kit.fontawesome.com/2f0439ef64.js" crossorigin="anonymous"></script>
-  <style>
-     a {
-          text-decoration: none;
-          color: rgba(0, 0, 0, .7);
-      }
-      a:hover {
-          text-decoration: none;
-          color: rgba(0, 0, 0, .7);
-      }
-      input[type="checkbox"] {
-        width: unset;
-        }
-      input{
-        width: 100%;
-        height: 42px;
-        border-radius: 4px;
-        border: 1px solid #e0e0e0;
-      }
-  </style>
-
-
-</head>
-<body class="bg-success">
-
-  <div class="main-content">
-
-    <!-- Header -->
-    <div class="header bg-gradient-primary py-4 py-lg-6">
-      <div class="container">
-        <!-- <div class="header-body text-center mb-7"> -->
-          <div class="row justify-content-center">
-            <div class="col-lg-5 col-md-6">
-              
-              
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="separator separator-bottom separator-skew zindex-100">
-        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
-          <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
-        </svg>
-      </div>
-    </div>
-
-        <!-- Page content -->
-        <div class="container mt--8 pb-5">
-            <!-- Table -->
-            <div class="row justify-content-center">
-              <div class="col-lg-6 col-md-8">
-              
-                <div class="card bg-secondary shadow border-0">
-                  <div class="card-header bg-transparent pb-5">
-                    <div class="text-center mt-2 mb-2">
-                      {% trans "PIMA Dashboard" %}
+<div class="container-fluid">
+    <div class="container" style="padding:32px 0">
+        <div class="card" style="padding-bottom:64px">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row" style="padding:32px 32px 18px 32px">
+                        <div class="col-3">
+                            <img src="{% static 'images/TNS-Labs-Logo-v2.png' %}" alt="TNS-Logo" />
+                        </div>
+                        <div class="col-7" style="text-align: left;">
+                            <p style="color:#000000; font-weight:900; font-size:24px; margin-bottom: 0px;">PIMA - Add User</p>
+                            <!-- <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 8px;">Interactive dashboard that uses Salesforce data to map Technoserve extension service data such as farm visits, training sessions, training observations, and beneficiaries' farms, to allow real-time monitoring across regions</p>
+                            <p style="color:#3a3a3a; font-weight:400; font-size:12px; margin-bottom: 0rem;"><b>Note:</b> <i>Synced every one hour</i></p> -->
+                        </div>
+                        <div class="col-2" style="text-align: right;">
+                            
+                            <span>Hi {{user.last_name | default:"User"}}! &nbsp;&nbsp; <a href="{% url 'logout' %}">Logout</a></span>
+                        </div>
                     </div>
-                  </div>
-                  <div class="card-body px-lg-5 py-lg-5">
-                    <div class="text-center mb-2">
-      
-                      {% if msg %}
-                        <small>{{ msg | safe }}</small>
-                      {% endif %}
-                      <p>Create user</p>
-                    
-                    </div>
-      
-                    {% if not success %}
-      
-                      <form method="POST" autocomplete="off">
-      
-                        {% csrf_token %}
-                  
-                        <div class="form-group">
-                            <p class="mb-1">Firstname: </p>
-                          <div class="input-group  mb-3" autocomplete="off">
-                            
-                            {{ form.first_name }}
-                          </div>
-                        </div>
-                        <span class="text-error">{{ form.first_name.errors }}</span>
-      
-                        <div class="form-group">
-                            <p class="mb-1">Lastname:</p>
-                            <div class="input-group  mb-3">
-                            
-                              
-                            
-                            {{ form.last_name }}
-                          </div>
-                        </div>
-                        <span class="text-error">{{ form.last_name.errors }}</span>
-      
-                        <div class="form-group">
-                            <p class="mb-1">Email:</p>
-                          <div class="input-group  mb-3">
-                            
-                              
-                           
-                            {{ form.email }}
-                          </div>
-                        </div>
-                        <span class="text-error">{{ form.email.errors }}</span>
-      
-                        <div class="form-group">
-                            <p class="mb-1">Phone:</p>
-                            <div class="input-group  mb-3">
-                              
-                            
-                            {{ form.phone }}
-                          </div>
-                        </div>
-                        <span class="text-error">{{ form.phone.errors }}</span>
-                        <div class="form-group">
-                            <p class="mb-1">Password:</p>
-                            <div class="input-group ">
-
-                            {{ form.password1 }}
-                          </div>
-                        </div>
-                        <span class="text-error">{{ form.password1.errors }}</span>
-      
-                        <div class="form-group">
-                            <p class="mb-1">Confirm Password:</p>
-                           
-                            <div class="input-group ">
-                               
-                            {{ form.password2 }}
-                          </div>
-                        </div>
-                        <span class="text-error">{{ form.password2.errors }}</span>
-      
-                        
-
-<div class="row">
-    <div class="col-6">
-        <div class="form-group">
-            <p class="mb-1">{% trans "Admin:" %}</p>
-             
-            <div class="input-group">
-              
+                </div>
                 
-              {{ form.is_superuser }}
             </div>
-          </div>
-          <span class="text-error">{{ form.is_superuser.errors }}</span>
-    </div>
-    <div class="col-6">
-        <div class="form-group">
-            <p class="mb-1">{% trans "Normal user:" %}</p>
-            <div class="input-group">
 
-              
-              {{ form.is_staff }}
+            <div class="row">
+                <div class="col-4">
+
+                    {% if messages %}
+                    {% for message in messages %}
+                      <div class="alert alert-success  alert-dismissible fade show" role="alert">
+                      {{ message }}
+                      </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
             </div>
-          </div>
-          <span class="text-error">{{ form.is_staff.errors }}</span>
+
+            <div class="row" style="padding-top: 32px; padding-left: 32px;">
+                    
+                <div class="col-4">
+                </div>
+                <div class="col-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <!-- <button type="submit" style="margin-top: 8px;" class="btn btn-primary btn-block">Create</button> -->
+                        
+                        <div class="row">
+                            <div class="col-6 text-right">
+                                <a href="{%url 'manage_users' %}" class="btn btn-link mt-2">Cancel</a>
+                            </div>
+                            <div class="col-6 text-right">
+                                <button type="submit" style="margin-top: 8px;" class="btn btn-primary btn-block mt-2">Create</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="col-4">
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-                          
-
-      
-                       <div class="row">
-                        <div class="col-6 text-right">
-                            <a href="{%url 'manage_users' %}" class="btn btn-link mt-4">Cancel</a>
-                        </div>
-                        <div class="col-6 text-right">
-                            <button type="submit" class="btn btn-primary mt-4">{% trans "Create account" %}</button>
-                        </div>
-                       </div>
-      
-                        
-                      </form>
-      
-                    {% endif %}  
-        
-                  </div>
-                </div>
-      
-              </div>
-            </div>
-      
-      
-          </div>
-        </div>
-  </div>
-  <script src="{% static 'assets/js/argon.js' %}"></script>
-
-</body>
-</html>
-
+{% endblock %}

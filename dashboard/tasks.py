@@ -9,6 +9,10 @@ from dashboard.models import DemoPlot, TrainingObservation, TrainingSession, Far
 SALESFORCE_INSTANCE = env('SALESFORCE_INSTANCE')
 
 def getToken():
+    '''
+    Return access token to be used by different functions to query data from salesforce.
+    '''
+
     PARAMS = {
         'grant_type' : 'password',
         'client_id' : env('SALESFORCE_CLIENT_ID'),
@@ -23,6 +27,10 @@ def getToken():
 ###################################################################
 @shared_task(bind=True)
 def getProgramsAndProjects(self):
+    '''
+    Job that store Projects and programs they belong to on the REDIS instance
+    '''
+
     #PROJECT_FORMAT: {'project_name':'program_name', ...}
     #PROGRAM_FORMAT: {'id':'program_name', ...}
 
@@ -62,6 +70,9 @@ def getProgramsAndProjects(self):
 
 @shared_task(bind=True)
 def getTrainingObservations(self):
+    '''
+    Job function that store Training observations from salesforce to REDIS instance and Database Instance.
+    '''
     
     records = list()
     TOKEN = getToken()
@@ -111,6 +122,9 @@ def getTrainingObservations(self):
 
 @shared_task(bind=True)
 def getTrainingSessions(self):
+    '''
+    Job function that store Training Sessions from salesforce to REDIS instance and Database Instance.
+    '''
     
     records = list()
     TOKEN = getToken()
@@ -160,6 +174,9 @@ def getTrainingSessions(self):
 
 @shared_task(bind=True)
 def getDemoPlots(self):
+    '''
+    Job function that store Demo Plot data from salesforce to REDIS instance and Database Instance.
+    '''
     
     records = list()
     TOKEN = getToken()
@@ -208,8 +225,9 @@ def getDemoPlots(self):
 
 @shared_task(bind=True)
 def getFarmVisits(self):
-    #QUERY
-    #SELECT Id,OwnerId,Date_Visited__c,Location_GPS__Latitude__s,Location_GPS__Longitude__s,Farmer_Trainer__r.Name,Training_Group__r.Name FROM Farm_Visit__c WHERE IsDeleted=false AND Location_GPS__Latitude__s != null AND Location_GPS__Longitude__s != null
+    '''
+    Job function that store Farm Visits from salesforce to REDIS instance and Database Instance.
+    '''
 
     records = list()
     TOKEN = getToken()

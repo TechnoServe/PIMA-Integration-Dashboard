@@ -90,19 +90,19 @@
                       {% if msg %}
                         <small>{{ msg | safe }}</small>
                       {% endif %}
-                      <p>Create user</p>
+                      <p>Edit user</p>
                     
                     </div>
       
                     {% if not success %}
       
-                      <form method="POST" autocomplete="off">
+                      <form method="POST">
       
                         {% csrf_token %}
                   
                         <div class="form-group">
                             <p class="mb-1">Firstname: </p>
-                          <div class="input-group  mb-3" autocomplete="off">
+                          <div class="input-group  mb-3">
                             
                             {{ form.first_name }}
                           </div>
@@ -130,6 +130,15 @@
                           </div>
                         </div>
                         <span class="text-error">{{ form.email.errors }}</span>
+
+                        <div class="form-group">
+                            <p class="mb-1">Active:</p>
+                            <div class="input-group  mb-3">
+                              
+                            
+                            {{ form.is_active }}
+                          </div>
+                        </div>
       
                         <div class="form-group">
                             <p class="mb-1">Phone:</p>
@@ -140,52 +149,33 @@
                           </div>
                         </div>
                         <span class="text-error">{{ form.phone.errors }}</span>
-                        <div class="form-group">
-                            <p class="mb-1">Password:</p>
-                            <div class="input-group ">
 
-                            {{ form.password1 }}
-                          </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <p class="mb-1">{% trans "Admin:" %}</p>
+                                    
+                                    <div class="input-group">
+                                    
+                                        
+                                    {{ form.is_superuser }}
+                                    </div>
+                                </div>
+                                <span class="text-error">{{ form.is_superuser.errors }}</span>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <p class="mb-1">{% trans "Normal user:" %}</p>
+                                    <div class="input-group">
+
+                                    
+                                    {{ form.is_staff }}
+                                    </div>
+                                </div>
+                                <span class="text-error">{{ form.is_staff.errors }}</span>
+                            </div>
+                            
                         </div>
-                        <span class="text-error">{{ form.password1.errors }}</span>
-      
-                        <div class="form-group">
-                            <p class="mb-1">Confirm Password:</p>
-                           
-                            <div class="input-group ">
-                               
-                            {{ form.password2 }}
-                          </div>
-                        </div>
-                        <span class="text-error">{{ form.password2.errors }}</span>
-      
-                        
-
-<div class="row">
-    <div class="col-6">
-        <div class="form-group">
-            <p class="mb-1">{% trans "Admin:" %}</p>
-             
-            <div class="input-group">
-              
-                
-              {{ form.is_superuser }}
-            </div>
-          </div>
-          <span class="text-error">{{ form.is_superuser.errors }}</span>
-    </div>
-    <div class="col-6">
-        <div class="form-group">
-            <p class="mb-1">{% trans "Normal user:" %}</p>
-            <div class="input-group">
-
-              
-              {{ form.is_staff }}
-            </div>
-          </div>
-          <span class="text-error">{{ form.is_staff.errors }}</span>
-    </div>
-</div>
 
                           
 
@@ -195,7 +185,7 @@
                             <a href="{%url 'manage_users' %}" class="btn btn-link mt-4">Cancel</a>
                         </div>
                         <div class="col-6 text-right">
-                            <button type="submit" class="btn btn-primary mt-4">{% trans "Create account" %}</button>
+                            <button type="submit" class="btn btn-primary mt-4">{% trans "Save" %}</button>
                         </div>
                        </div>
       

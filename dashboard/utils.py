@@ -19,7 +19,7 @@ def add_basemap_layers(map):
 #TrainingObservations
 def add_training_observations(map, training_observations ,cluster, feature_group):
     '''
-    ADD Training Observations on the map
+    ADD Training Observations to the map
     '''
     for Observation in training_observations:
             cord = [Observation.Observation_Location_Latitude_s, Observation.Observation_Location_Longitude_s]
@@ -42,7 +42,7 @@ def add_training_observations(map, training_observations ,cluster, feature_group
 #Training Sessions
 def add_training_sessions(map, training_sessions ,cluster, feature_group):
     '''
-    ADD Training Sessions on the map
+    ADD Training Sessions to the map
     '''
     for trainingsession in training_sessions:
             cord = [trainingsession.Location_GPS_Latitude_s, trainingsession.Location_GPS_Longitude_s]
@@ -66,7 +66,7 @@ def add_training_sessions(map, training_sessions ,cluster, feature_group):
 
 def add_demo_plots(map, demo_plots, cluster, feature_group):
     '''
-    ADD Demo Plots on the map
+    ADD Demo Plots to the map
     '''
     for demo_plot in demo_plots:
             cord = [demo_plot.Observation_Location_Latitude_s, demo_plot.Observation_Location_Longitude_s]

@@ -31,7 +31,7 @@ class UserCreationForm(forms.ModelForm):
         )
 
         labels = {
-            'is_staff': _('Business Advisor'),
+            'is_staff': _('Normal user'),
             'is_superuser': _('Admin'),
         }
         help_texts = {
@@ -56,7 +56,7 @@ class UserCreationForm(forms.ModelForm):
 
 class UserChangeForm(forms.ModelForm):
 
-    password = ReadOnlyPasswordHashField()
+    #password = ReadOnlyPasswordHashField()
 
     class Meta:
         model = User
@@ -64,17 +64,18 @@ class UserChangeForm(forms.ModelForm):
             "first_name",
             "last_name",
             "email",
+            "is_active",
             "phone",
             "is_staff",
             "is_superuser",
-            "is_active"
+            
         )
         labels = {
             'is_staff': _('Normal User (BA)'),
             'is_superuser': _('Admin'),
         }
         help_texts = {
-            'phone': _('Example: 250787734876'),
+            #'phone': _('Example: 250787734876'),
         }
 
 

@@ -1,4 +1,3 @@
-from multiprocessing import context
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
@@ -13,6 +12,7 @@ from django.utils.encoding import force_bytes
 from django.db.models.query_utils import Q
 from django.template.loader import render_to_string
 from django.core.mail import send_mail, BadHeaderError
+from PIMA_Dashboard.settings import env
 
 # Create your views here.
 
@@ -133,20 +133,19 @@ def password_reset_request(request):
                     subject = "Password Reset Requested"
                     email_template_name = "password/password_reset_email.txt"
 					
-                    c = {
+                    opts = {
                         'email': user.email,
-                        'domain': '127.0.0.1:8000',
+                        'domain': env('SITE_DOMAIN'),
                         'site_name': 'PIMA Dashboard',
                         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                         'user': user,
                         'token': default_token_generator.make_token(user),
-                        'protocol': 'http',
+                        'protocol': env('SITE_WEB_PROTOCOL'),
                     }
-					
-                    email = render_to_string(email_template_name, c)
+                    email = render_to_string(email_template_name, opts)
 
                     try:
-                        send_mail(subject, email, 'salesforce@tnslabs.org' , [user.email], fail_silently=False)    
+                        send_mail(subject, email, env('EMAIL_USER') , [user.email], fail_silently=False)    
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
 					

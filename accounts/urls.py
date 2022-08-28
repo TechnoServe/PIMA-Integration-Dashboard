@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import user_logout, create_user_account, manage_users, delete_user, edit_user, password_reset_request
 from django.contrib.auth import views as auth_views
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
     #path('login/', user_login, name='login'),
@@ -10,6 +11,7 @@ urlpatterns = [
     path('create_user/', create_user_account, name='create_user'),
     path('edit_user/<int:id>/', edit_user, name='edit_user'),
     path('delete_user/<int:id>/', delete_user, name='delete_user'),
+    path('profile/', RedirectView.as_view(pattern_name='home')),
 
     #PASSWORD RESET
     path('password_reset/', password_reset_request, name='password_reset'),

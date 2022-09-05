@@ -188,6 +188,7 @@ def project_details(request, slug=None):
             query_training_observations =  TrainingObservation.objects.filter(Project_Name_c_slug__iexact=slug).filter(Date_c__range=[start_date, end_date])
             query_training_sessions = TrainingSession.objects.filter(Project_Name_c_slug__iexact=slug).filter(Date_c__range=[start_date, end_date])
             query_demo_plots = DemoPlot.objects.filter(Project_Name_c_slug__iexact=slug).filter(Date_c__range=[start_date, end_date])
+            #query_farm_visits = FarmVisit.objects.filter(Project_Name_c_slug__iexact=slug).filter(Date_c__range=[start_date, end_date])
             
 
             #TrainingObservations
@@ -198,6 +199,9 @@ def project_details(request, slug=None):
 
             #DemoPlot
             add_demo_plots(map, query_demo_plots, cluster_demo_plots, featureGroup_demo_plots)
+
+            #ADD FarmVisit to MAP
+            #add_farm_visits(map, query_farm_visits, cluster_farm_visits, featureGroup_farm_visits)
 
             add_required_objects(map)
 
@@ -215,7 +219,8 @@ def project_details(request, slug=None):
             query_training_observations =  TrainingObservation.objects.filter(Project_Name_c_slug__iexact=slug)
             query_training_sessions = TrainingSession.objects.filter(Project_Name_c_slug__iexact=slug)
             query_demo_plots = DemoPlot.objects.filter(Project_Name_c_slug__iexact=slug)
-            
+            #query_farm_visits = FarmVisit.objects.filter(Project_Name_c_slug__iexact=slug)
+
             #TrainingObservations
             add_training_observations(map, query_training_observations, cluster_training_observations, featureGroup_training_observation)
 
@@ -224,6 +229,10 @@ def project_details(request, slug=None):
 
             #DemoPlot
             add_demo_plots(map, query_demo_plots, cluster_demo_plots, featureGroup_demo_plots)
+
+            #ADD FarmVisit to MAP
+            #add_farm_visits(map, query_farm_visits, cluster_farm_visits, featureGroup_farm_visits)
+            
 
             add_required_objects(map)  
 
